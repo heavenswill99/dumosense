@@ -1,6 +1,0 @@
-assessment_type_id,assessment_name,cognitive_domain,description,active
-AT001,Memory,memory,Gamified memory assessment,1
-AT002,Attention,attention,Gamified attention assessment,1
-AT003,Executive Function,executive_function,Gamified executive function assessment,1
-AT004,Processing Speed,processing_speed,Gamified processing speed assessment,1
-AT005,Language,language,Gamified language assessment,1
