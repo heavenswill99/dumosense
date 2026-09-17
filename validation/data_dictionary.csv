@@ -1,0 +1,163 @@
+table_name,column_name,data_type,description,nullable,primary_key,foreign_key,allowed_values,example
+assessment_types,assessment_type_id,VARCHAR/TEXT/NUMERIC/DATETIME,Assessment type id — Cognitive domains.,NO,YES,assessment_types.assessment_type_id,,AT001
+assessment_types,assessment_name,VARCHAR/TEXT/NUMERIC/DATETIME,Assessment name — Cognitive domains.,YES,NO,,,Memory
+assessment_types,cognitive_domain,VARCHAR/TEXT/NUMERIC/DATETIME,Cognitive domain — Cognitive domains.,YES,NO,,,memory
+assessment_types,description,VARCHAR/TEXT/NUMERIC/DATETIME,Description — Cognitive domains.,YES,NO,,,Gamified memory assessment
+assessment_types,active,VARCHAR/TEXT/NUMERIC/DATETIME,Active — Cognitive domains.,YES,NO,,,1
+audit_logs,audit_id,VARCHAR/TEXT/NUMERIC/DATETIME,Audit id — Authorized audit examples.,NO,YES,,,AUD00000001
+audit_logs,actor_user_id,VARCHAR/TEXT/NUMERIC/DATETIME,Actor user id — Authorized audit examples.,YES,NO,users.user_id,,USR000001
+audit_logs,action,VARCHAR/TEXT/NUMERIC/DATETIME,Action — Authorized audit examples.,YES,NO,,,CREATE
+audit_logs,resource_type,VARCHAR/TEXT/NUMERIC/DATETIME,Resource type — Authorized audit examples.,YES,NO,,,assessment_session
+audit_logs,resource_id,VARCHAR/TEXT/NUMERIC/DATETIME,Resource id — Authorized audit examples.,YES,NO,,,SES00000001
+audit_logs,timestamp,VARCHAR/TEXT/NUMERIC/DATETIME,Timestamp — Authorized audit examples.,YES,NO,,,2026-04-13T23:06:00
+audit_logs,status,VARCHAR/TEXT/NUMERIC/DATETIME,Status — Authorized audit examples.,YES,NO,,,SUCCESS
+events,event_id,VARCHAR/TEXT/NUMERIC/DATETIME,Event id — Product event stream.,NO,YES,,,EVT00000001
+events,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Product event stream.,YES,NO,users.user_id,,USR000001
+events,event_type,VARCHAR/TEXT/NUMERIC/DATETIME,Event type — Product event stream.,YES,NO,,,account_created
+events,timestamp,VARCHAR/TEXT/NUMERIC/DATETIME,Timestamp — Product event stream.,YES,NO,,,2025-12-08T06:00:00
+events,source,VARCHAR/TEXT/NUMERIC/DATETIME,Source — Product event stream.,YES,NO,,,account
+events,related_entity_type,VARCHAR/TEXT/NUMERIC/DATETIME,Related entity type — Product event stream.,YES,NO,,,user
+events,related_entity_id,VARCHAR/TEXT/NUMERIC/DATETIME,Related entity id — Product event stream.,YES,NO,,,USR000001
+events,metadata,VARCHAR/TEXT/NUMERIC/DATETIME,Metadata — Product event stream.,YES,NO,,,{}
+consents,consent_id,VARCHAR/TEXT/NUMERIC/DATETIME,Consent id — Current consent state.,NO,YES,consents.consent_id,,CON00000001
+consents,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Current consent state.,YES,NO,users.user_id,,USR000001
+consents,consent_type,VARCHAR/TEXT/NUMERIC/DATETIME,Consent type — Current consent state.,YES,NO,,,product_data_processing
+consents,purpose,VARCHAR/TEXT/NUMERIC/DATETIME,Purpose — Current consent state.,YES,NO,,,Core product operation
+consents,consent_version,VARCHAR/TEXT/NUMERIC/DATETIME,Consent version — Current consent state.,YES,NO,,,1.0
+consents,status,VARCHAR/TEXT/NUMERIC/DATETIME,Status — Current consent state.,YES,NO,,,granted
+consents,granted_at,VARCHAR/TEXT/NUMERIC/DATETIME,Granted at — Current consent state.,YES,NO,,,2025-12-08T06:08:00
+consents,withdrawn_at,VARCHAR/TEXT/NUMERIC/DATETIME,Withdrawn at — Current consent state.,YES,NO,,,
+actions,action_id,VARCHAR/TEXT/NUMERIC/DATETIME,Action id — User response to recommendation.,NO,YES,,,ACT00000001
+actions,recommendation_id,VARCHAR/TEXT/NUMERIC/DATETIME,Recommendation id — User response to recommendation.,YES,NO,recommendations.recommendation_id,,REC00000002
+actions,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — User response to recommendation.,YES,NO,users.user_id,,USR000002
+actions,action_type,VARCHAR/TEXT/NUMERIC/DATETIME,Action type — User response to recommendation.,YES,NO,,,viewed
+actions,action_status,VARCHAR/TEXT/NUMERIC/DATETIME,Action status — User response to recommendation.,YES,NO,,,viewed
+actions,action_at,VARCHAR/TEXT/NUMERIC/DATETIME,Action at — User response to recommendation.,YES,NO,,,2026-06-01T16:00:00
+context_records,context_id,VARCHAR/TEXT/NUMERIC/DATETIME,Context id — Session-related context.,NO,YES,,,CTX00000001
+context_records,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Session-related context.,YES,NO,users.user_id,,USR000001
+context_records,related_session_id,VARCHAR/TEXT/NUMERIC/DATETIME,Related session id — Session-related context.,YES,NO,assessment_sessions.session_id,,SES00000004
+context_records,recorded_at,VARCHAR/TEXT/NUMERIC/DATETIME,Recorded at — Session-related context.,YES,NO,,,2026-07-13T15:59:00
+context_records,context_type,VARCHAR/TEXT/NUMERIC/DATETIME,Context type — Session-related context.,YES,NO,,,stress
+context_records,context_value,VARCHAR/TEXT/NUMERIC/DATETIME,Context value — Session-related context.,YES,NO,,,high
+context_records,source,VARCHAR/TEXT/NUMERIC/DATETIME,Source — Session-related context.,YES,NO,,,self_report
+recommendations,recommendation_id,VARCHAR/TEXT/NUMERIC/DATETIME,Recommendation id — Non-treatment product recommendations.,NO,YES,recommendations.recommendation_id,,REC00000001
+recommendations,insight_id,VARCHAR/TEXT/NUMERIC/DATETIME,Insight id — Non-treatment product recommendations.,YES,NO,insights.insight_id,,INS00000001
+recommendations,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Non-treatment product recommendations.,YES,NO,users.user_id,,USR000001
+recommendations,product_code,VARCHAR/TEXT/NUMERIC/DATETIME,Product code — Non-treatment product recommendations.,YES,NO,,,MINDGUARD
+recommendations,recommendation_type,VARCHAR/TEXT/NUMERIC/DATETIME,Recommendation type — Non-treatment product recommendations.,YES,NO,,,maintain_monitoring
+recommendations,recommendation_text,VARCHAR/TEXT/NUMERIC/DATETIME,Recommendation text — Non-treatment product recommendations.,YES,NO,,,Continue routine monitoring.
+recommendations,priority,VARCHAR/TEXT/NUMERIC/DATETIME,Priority — Non-treatment product recommendations.,YES,NO,,,low
+recommendations,created_at,VARCHAR/TEXT/NUMERIC/DATETIME,Created at — Non-treatment product recommendations.,YES,NO,,,2026-04-15T11:00:20
+cognitive_results,cognitive_result_id,VARCHAR/TEXT/NUMERIC/DATETIME,Cognitive result id — Derived completed-session results.,NO,YES,,,CR00000001
+cognitive_results,session_id,VARCHAR/TEXT/NUMERIC/DATETIME,Session id — Derived completed-session results.,YES,NO,assessment_sessions.session_id,,SES00000002
+cognitive_results,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Derived completed-session results.,YES,NO,users.user_id,,USR000001
+cognitive_results,assessment_type_id,VARCHAR/TEXT/NUMERIC/DATETIME,Assessment type id — Derived completed-session results.,YES,NO,assessment_types.assessment_type_id,,AT002
+cognitive_results,total_trials,VARCHAR/TEXT/NUMERIC/DATETIME,Total trials — Derived completed-session results.,YES,NO,,,14
+cognitive_results,correct_responses,VARCHAR/TEXT/NUMERIC/DATETIME,Correct responses — Derived completed-session results.,YES,NO,,,11
+cognitive_results,incorrect_responses,VARCHAR/TEXT/NUMERIC/DATETIME,Incorrect responses — Derived completed-session results.,YES,NO,,,3
+cognitive_results,omissions,VARCHAR/TEXT/NUMERIC/DATETIME,Omissions — Derived completed-session results.,YES,NO,,,0
+cognitive_results,accuracy_rate,VARCHAR/TEXT/NUMERIC/DATETIME,Accuracy rate — Derived completed-session results.,YES,NO,,,0.785714
+cognitive_results,mean_reaction_time_ms,VARCHAR/TEXT/NUMERIC/DATETIME,Mean reaction time ms — Derived completed-session results.,YES,NO,,,1058.98
+cognitive_results,median_reaction_time_ms,VARCHAR/TEXT/NUMERIC/DATETIME,Median reaction time ms — Derived completed-session results.,YES,NO,,,805.91
+cognitive_results,reaction_time_variability_ms,VARCHAR/TEXT/NUMERIC/DATETIME,Reaction time variability ms — Derived completed-session results.,YES,NO,,,754.55
+cognitive_results,completion_time_seconds,VARCHAR/TEXT/NUMERIC/DATETIME,Completion time seconds — Derived completed-session results.,YES,NO,,,68.0
+cognitive_results,difficulty_level,VARCHAR/TEXT/NUMERIC/DATETIME,Difficulty level — Derived completed-session results.,YES,NO,,,4
+cognitive_results,baseline_difference,VARCHAR/TEXT/NUMERIC/DATETIME,Baseline difference — Derived completed-session results.,YES,NO,,,0.0
+cognitive_results,previous_session_difference,VARCHAR/TEXT/NUMERIC/DATETIME,Previous session difference — Derived completed-session results.,YES,NO,,,0.0
+cognitive_results,calculated_at,VARCHAR/TEXT/NUMERIC/DATETIME,Calculated at — Derived completed-session results.,YES,NO,,,2026-05-07T07:56:10
+user_profiles,profile_id,VARCHAR/TEXT/NUMERIC/DATETIME,Profile id — Synthetic demographic profile.,NO,YES,,,PRF000001
+user_profiles,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Synthetic demographic profile.,YES,NO,users.user_id,,USR000001
+user_profiles,date_of_birth,VARCHAR/TEXT/NUMERIC/DATETIME,Date of birth — Synthetic demographic profile.,YES,NO,,,1987-01-22
+user_profiles,age_group,VARCHAR/TEXT/NUMERIC/DATETIME,Age group — Synthetic demographic profile.,YES,NO,,,35-44
+user_profiles,sex,VARCHAR/TEXT/NUMERIC/DATETIME,Sex — Synthetic demographic profile.,YES,NO,,,female
+user_profiles,country,VARCHAR/TEXT/NUMERIC/DATETIME,Country — Synthetic demographic profile.,YES,NO,,,Nigeria
+user_profiles,state_or_region,VARCHAR/TEXT/NUMERIC/DATETIME,State or region — Synthetic demographic profile.,YES,NO,,,FCT
+user_profiles,profile_status,VARCHAR/TEXT/NUMERIC/DATETIME,Profile status — Synthetic demographic profile.,YES,NO,,,complete
+user_profiles,created_at,VARCHAR/TEXT/NUMERIC/DATETIME,Created at — Synthetic demographic profile.,YES,NO,,,2025-12-08T08:00:00
+user_profiles,updated_at,VARCHAR/TEXT/NUMERIC/DATETIME,Updated at — Synthetic demographic profile.,YES,NO,,,2026-08-26T12:00:00
+product_enrollments,enrollment_id,VARCHAR/TEXT/NUMERIC/DATETIME,Enrollment id — Product participation.,NO,YES,,,ENR00000001
+product_enrollments,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Product participation.,YES,NO,users.user_id,,USR000001
+product_enrollments,product_code,VARCHAR/TEXT/NUMERIC/DATETIME,Product code — Product participation.,YES,NO,,,MINDGUARD
+product_enrollments,enrollment_status,VARCHAR/TEXT/NUMERIC/DATETIME,Enrollment status — Product participation.,YES,NO,,,active
+product_enrollments,enrolled_at,VARCHAR/TEXT/NUMERIC/DATETIME,Enrolled at — Product participation.,YES,NO,,,2025-12-13T11:00:00
+product_enrollments,discontinued_at,VARCHAR/TEXT/NUMERIC/DATETIME,Discontinued at — Product participation.,YES,NO,,,
+insights,insight_id,VARCHAR/TEXT/NUMERIC/DATETIME,Insight id — Synthetic intelligence outputs.,NO,YES,insights.insight_id,,INS00000001
+insights,run_id,VARCHAR/TEXT/NUMERIC/DATETIME,Run id — Synthetic intelligence outputs.,YES,NO,intelligence_runs.run_id,,RUN00000001
+insights,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Synthetic intelligence outputs.,YES,NO,users.user_id,,USR000001
+insights,product_code,VARCHAR/TEXT/NUMERIC/DATETIME,Product code — Synthetic intelligence outputs.,YES,NO,,,MINDGUARD
+insights,insight_type,VARCHAR/TEXT/NUMERIC/DATETIME,Insight type — Synthetic intelligence outputs.,YES,NO,,,stable_pattern
+insights,insight_text,VARCHAR/TEXT/NUMERIC/DATETIME,Insight text — Synthetic intelligence outputs.,YES,NO,,,Synthetic output: stable pattern.
+insights,severity_or_priority,VARCHAR/TEXT/NUMERIC/DATETIME,Severity or priority — Synthetic intelligence outputs.,YES,NO,,,low
+insights,explanation_text,VARCHAR/TEXT/NUMERIC/DATETIME,Explanation text — Synthetic intelligence outputs.,YES,NO,,,Architecture-testing synthetic explanation only.
+insights,generated_at,VARCHAR/TEXT/NUMERIC/DATETIME,Generated at — Synthetic intelligence outputs.,YES,NO,,,2026-04-15T11:00:10
+assessment_sessions,session_id,VARCHAR/TEXT/NUMERIC/DATETIME,Session id — Assessment attempts.,NO,YES,assessment_sessions.session_id,,SES00000001
+assessment_sessions,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Assessment attempts.,YES,NO,users.user_id,,USR000001
+assessment_sessions,assessment_type_id,VARCHAR/TEXT/NUMERIC/DATETIME,Assessment type id — Assessment attempts.,YES,NO,assessment_types.assessment_type_id,,AT003
+assessment_sessions,started_at,VARCHAR/TEXT/NUMERIC/DATETIME,Started at — Assessment attempts.,YES,NO,,,2026-04-13T23:06:00
+assessment_sessions,completed_at,VARCHAR/TEXT/NUMERIC/DATETIME,Completed at — Assessment attempts.,YES,NO,,,
+assessment_sessions,session_status,VARCHAR/TEXT/NUMERIC/DATETIME,Session status — Assessment attempts.,YES,NO,,,abandoned
+assessment_sessions,difficulty_level,VARCHAR/TEXT/NUMERIC/DATETIME,Difficulty level — Assessment attempts.,YES,NO,,,1
+assessment_sessions,device_type,VARCHAR/TEXT/NUMERIC/DATETIME,Device type — Assessment attempts.,YES,NO,,,tablet
+assessment_sessions,consent_id,VARCHAR/TEXT/NUMERIC/DATETIME,Consent id — Assessment attempts.,YES,NO,consents.consent_id,,CON00000002
+users,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Account root.,NO,YES,users.user_id,,USR000001
+users,email,VARCHAR/TEXT/NUMERIC/DATETIME,Email — Account root.,YES,NO,,,USR000001@example.com
+users,account_status,VARCHAR/TEXT/NUMERIC/DATETIME,Account status — Account root.,YES,NO,,,active
+users,created_at,VARCHAR/TEXT/NUMERIC/DATETIME,Created at — Account root.,YES,NO,,,2025-12-08T06:00:00
+users,updated_at,VARCHAR/TEXT/NUMERIC/DATETIME,Updated at — Account root.,YES,NO,,,2026-08-19T12:00:00
+intelligence_runs,run_id,VARCHAR/TEXT/NUMERIC/DATETIME,Run id — Synthetic rule/model runs.,NO,YES,intelligence_runs.run_id,,RUN00000001
+intelligence_runs,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Synthetic rule/model runs.,YES,NO,users.user_id,,USR000001
+intelligence_runs,product_code,VARCHAR/TEXT/NUMERIC/DATETIME,Product code — Synthetic rule/model runs.,YES,NO,,,MINDGUARD
+intelligence_runs,triggered_at,VARCHAR/TEXT/NUMERIC/DATETIME,Triggered at — Synthetic rule/model runs.,YES,NO,,,2026-04-15T11:00:00
+intelligence_runs,trigger_type,VARCHAR/TEXT/NUMERIC/DATETIME,Trigger type — Synthetic rule/model runs.,YES,NO,,,new_data
+intelligence_runs,model_or_rule_version,VARCHAR/TEXT/NUMERIC/DATETIME,Model or rule version — Synthetic rule/model runs.,YES,NO,,,RULE_MG_V0.1
+intelligence_runs,input_start_date,VARCHAR/TEXT/NUMERIC/DATETIME,Input start date — Synthetic rule/model runs.,YES,NO,,,2025-12-13T11:00:00
+intelligence_runs,input_end_date,VARCHAR/TEXT/NUMERIC/DATETIME,Input end date — Synthetic rule/model runs.,YES,NO,,,2026-04-15T11:00:00
+intelligence_runs,run_status,VARCHAR/TEXT/NUMERIC/DATETIME,Run status — Synthetic rule/model runs.,YES,NO,,,completed
+consent_history,consent_history_id,VARCHAR/TEXT/NUMERIC/DATETIME,Consent history id — Consent transitions.,NO,YES,,,CH00000001
+consent_history,consent_id,VARCHAR/TEXT/NUMERIC/DATETIME,Consent id — Consent transitions.,YES,NO,consents.consent_id,,CON00000480
+consent_history,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Consent transitions.,YES,NO,users.user_id,,USR000145
+consent_history,previous_status,VARCHAR/TEXT/NUMERIC/DATETIME,Previous status — Consent transitions.,YES,NO,,,granted
+consent_history,new_status,VARCHAR/TEXT/NUMERIC/DATETIME,New status — Consent transitions.,YES,NO,,,withdrawn
+consent_history,changed_at,VARCHAR/TEXT/NUMERIC/DATETIME,Changed at — Consent transitions.,YES,NO,,,2026-04-20T10:17:00
+consent_history,reason,VARCHAR/TEXT/NUMERIC/DATETIME,Reason — Consent transitions.,YES,NO,,,User withdrawal
+wellbeing_checkins,checkin_id,VARCHAR/TEXT/NUMERIC/DATETIME,Checkin id — Periodic self-report context.,NO,YES,,,WBC00000001
+wellbeing_checkins,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Periodic self-report context.,YES,NO,users.user_id,,USR000001
+wellbeing_checkins,recorded_at,VARCHAR/TEXT/NUMERIC/DATETIME,Recorded at — Periodic self-report context.,YES,NO,,,2025-12-23T01:00:00
+wellbeing_checkins,mood_level,VARCHAR/TEXT/NUMERIC/DATETIME,Mood level — Periodic self-report context.,YES,NO,,,4.6
+wellbeing_checkins,stress_level,VARCHAR/TEXT/NUMERIC/DATETIME,Stress level — Periodic self-report context.,YES,NO,,,1.9
+wellbeing_checkins,anxiety_level,VARCHAR/TEXT/NUMERIC/DATETIME,Anxiety level — Periodic self-report context.,YES,NO,,,1.3
+wellbeing_checkins,sleep_quality,VARCHAR/TEXT/NUMERIC/DATETIME,Sleep quality — Periodic self-report context.,YES,NO,,,3.3
+wellbeing_checkins,sleep_hours,VARCHAR/TEXT/NUMERIC/DATETIME,Sleep hours — Periodic self-report context.,YES,NO,,,7.8
+wellbeing_checkins,social_wellbeing,VARCHAR/TEXT/NUMERIC/DATETIME,Social wellbeing — Periodic self-report context.,YES,NO,,,4.3
+wellbeing_checkins,perceived_cognitive_change,VARCHAR/TEXT/NUMERIC/DATETIME,Perceived cognitive change — Periodic self-report context.,YES,NO,,,1.1
+wellbeing_checkins,completion_status,VARCHAR/TEXT/NUMERIC/DATETIME,Completion status — Periodic self-report context.,YES,NO,,,partial
+health_reserve_assessments,reserve_assessment_id,VARCHAR/TEXT/NUMERIC/DATETIME,Reserve assessment id — Preparedness snapshots.,NO,YES,,,HRA00000001
+health_reserve_assessments,user_id,VARCHAR/TEXT/NUMERIC/DATETIME,User id — Preparedness snapshots.,YES,NO,users.user_id,,USR000005
+health_reserve_assessments,assessed_at,VARCHAR/TEXT/NUMERIC/DATETIME,Assessed at — Preparedness snapshots.,YES,NO,,,2025-12-21T19:00:00
+health_reserve_assessments,healthcare_coverage_status,VARCHAR/TEXT/NUMERIC/DATETIME,Healthcare coverage status — Preparedness snapshots.,YES,NO,,,partial
+health_reserve_assessments,estimated_healthcare_exposure,VARCHAR/TEXT/NUMERIC/DATETIME,Estimated healthcare exposure — Preparedness snapshots.,YES,NO,,,653000
+health_reserve_assessments,emergency_health_resources,VARCHAR/TEXT/NUMERIC/DATETIME,Emergency health resources — Preparedness snapshots.,YES,NO,,,200000
+health_reserve_assessments,monthly_financial_obligations,VARCHAR/TEXT/NUMERIC/DATETIME,Monthly financial obligations — Preparedness snapshots.,YES,NO,,,167000
+health_reserve_assessments,number_of_dependants,VARCHAR/TEXT/NUMERIC/DATETIME,Number of dependants — Preparedness snapshots.,YES,NO,,,5
+health_reserve_assessments,current_preparedness_amount,VARCHAR/TEXT/NUMERIC/DATETIME,Current preparedness amount — Preparedness snapshots.,YES,NO,,,1096000
+health_reserve_assessments,preparedness_target,VARCHAR/TEXT/NUMERIC/DATETIME,Preparedness target — Preparedness snapshots.,YES,NO,,,1419000
+health_reserve_assessments,preparedness_gap,VARCHAR/TEXT/NUMERIC/DATETIME,Preparedness gap — Preparedness snapshots.,YES,NO,,,323000
+health_reserve_assessments,preparedness_ratio,VARCHAR/TEXT/NUMERIC/DATETIME,Preparedness ratio — Preparedness snapshots.,YES,NO,,,0.772375
+health_reserve_assessments,reserve_status,VARCHAR/TEXT/NUMERIC/DATETIME,Reserve status — Preparedness snapshots.,YES,NO,,,moderate
+cognitive_responses,response_id,VARCHAR/TEXT/NUMERIC/DATETIME,Response id — Trial-level responses.,NO,YES,,,RSP00000001
+cognitive_responses,session_id,VARCHAR/TEXT/NUMERIC/DATETIME,Session id — Trial-level responses.,YES,NO,assessment_sessions.session_id,,SES00000001
+cognitive_responses,task_id,VARCHAR/TEXT/NUMERIC/DATETIME,Task id — Trial-level responses.,YES,NO,cognitive_tasks.task_id,,TSK005
+cognitive_responses,trial_number,VARCHAR/TEXT/NUMERIC/DATETIME,Trial number — Trial-level responses.,YES,NO,,,1
+cognitive_responses,stimulus_type,VARCHAR/TEXT/NUMERIC/DATETIME,Stimulus type — Trial-level responses.,YES,NO,,,visual
+cognitive_responses,response_type,VARCHAR/TEXT/NUMERIC/DATETIME,Response type — Trial-level responses.,YES,NO,,,typed
+cognitive_responses,is_correct,VARCHAR/TEXT/NUMERIC/DATETIME,Is correct — Trial-level responses.,YES,NO,,,1
+cognitive_responses,reaction_time_ms,VARCHAR/TEXT/NUMERIC/DATETIME,Reaction time ms — Trial-level responses.,YES,NO,,,638.4
+cognitive_responses,response_value,VARCHAR/TEXT/NUMERIC/DATETIME,Response value — Trial-level responses.,YES,NO,,,8
+cognitive_responses,omission,VARCHAR/TEXT/NUMERIC/DATETIME,Omission — Trial-level responses.,YES,NO,,,0
+cognitive_responses,recorded_at,VARCHAR/TEXT/NUMERIC/DATETIME,Recorded at — Trial-level responses.,YES,NO,,,2026-04-13T23:06:03
+cognitive_tasks,task_id,VARCHAR/TEXT/NUMERIC/DATETIME,Task id — Gamified task catalog.,NO,YES,cognitive_tasks.task_id,,TSK001
+cognitive_tasks,assessment_type_id,VARCHAR/TEXT/NUMERIC/DATETIME,Assessment type id — Gamified task catalog.,YES,NO,assessment_types.assessment_type_id,,AT001
+cognitive_tasks,task_name,VARCHAR/TEXT/NUMERIC/DATETIME,Task name — Gamified task catalog.,YES,NO,,,Sequence Recall
+cognitive_tasks,task_type,VARCHAR/TEXT/NUMERIC/DATETIME,Task type — Gamified task catalog.,YES,NO,,,sequence_recall
+cognitive_tasks,default_difficulty,VARCHAR/TEXT/NUMERIC/DATETIME,Default difficulty — Gamified task catalog.,YES,NO,,,2
+cognitive_tasks,active,VARCHAR/TEXT/NUMERIC/DATETIME,Active — Gamified task catalog.,YES,NO,,,1
