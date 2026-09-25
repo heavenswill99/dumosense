@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #F8F3F5;
+    --background-secondary: #FFFFFF;
+    --background-tertiary: #F2EAED;
+    --foreground: #2C1723;
+    --card: #FFFFFF;
+    --card-foreground: #2C1723;
+    --popover: #FFFFFF;
+    --popover-foreground: #2C1723;
+    --primary: #5A3045;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F2EAED;
+    --secondary-foreground: #5A3045;
+    --muted: #F2EAED;
+    --muted-foreground: #8A6678;
+    --accent: #E5B8C2;
+    --accent-foreground: #2C1723;
+    --destructive: #A83B46;
+    --destructive-foreground: #FFFFFF;
+    --border: rgba(90, 48, 69, 0.12);
+    --input: rgba(90, 48, 69, 0.18);
+    --ring: #B56C82;
+    --surface-hover: #F5ECEF;
+    --status-success: #3B7A57;
+    --status-warning: #C87D32;
+    --status-error: #A83B46;
+    --header-bg: rgba(248, 243, 245, 0.82);
+    --rose: #B56C82;
+    --soft-rose: #E5B8C2;
+    --plum: #3A202F;
+    --burgundy: #5A3045;
+    --core-stroke: #B56C82;
+    --core-hi: #F4D9E1;
+    --core-glow: rgba(181, 108, 130, 0.5);
+    --radius: 0.9rem;
+    --chart-1: #B56C82;
+    --chart-2: #5A3045;
+    --chart-3: #E5B8C2;
+    --chart-4: #8A6678;
+    --chart-5: #3A202F;
+}
+
+.dark {
+    --background: #1A0E15;
+    --background-secondary: #25141E;
+    --background-tertiary: #331C29;
+    --foreground: #F8F3F5;
+    --card: #281621;
+    --card-foreground: #F8F3F5;
+    --popover: #281621;
+    --popover-foreground: #F8F3F5;
+    --primary: #B56C82;
+    --primary-foreground: #1A0E15;
+    --secondary: #331C29;
+    --secondary-foreground: #E5B8C2;
+    --muted: #331C29;
+    --muted-foreground: #C79AAC;
+    --accent: #5A3045;
+    --accent-foreground: #F8F3F5;
+    --destructive: #E56B6F;
+    --destructive-foreground: #1A0E15;
+    --border: rgba(229, 184, 194, 0.15);
+    --input: rgba(229, 184, 194, 0.22);
+    --ring: #E5B8C2;
+    --surface-hover: #351E2B;
+    --status-success: #52B788;
+    --status-warning: #E0A96D;
+    --status-error: #E56B6F;
+    --header-bg: rgba(26, 14, 21, 0.82);
+    --rose: #E5B8C2;
+    --soft-rose: #5A3045;
+    --core-stroke: #E5B8C2;
+    --core-hi: #FFF4F7;
+    --core-glow: rgba(229, 184, 194, 0.55);
+    --chart-1: #E5B8C2;
+    --chart-2: #B56C82;
+    --chart-3: #5A3045;
+    --chart-4: #C79AAC;
+    --chart-5: #F8F3F5;
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        letter-spacing: -0.01em;
+    }
+    h1, h2, h3, h4, .font-display {
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    }
+    ::selection {
+        background: var(--soft-rose);
+        color: var(--plum);
+    }
+}
+
+/* Accessibility: user text-size preference */
+html[data-text-size="large"] { font-size: 18px; }
+html[data-text-size="xlarge"] { font-size: 20px; }
+html[data-high-contrast="true"] {
+    --border: rgba(90, 48, 69, 0.4);
+    --muted-foreground: #5A3045;
+}
+html.dark[data-high-contrast="true"] {
+    --border: rgba(229, 184, 194, 0.5);
+    --muted-foreground: #E5B8C2;
+}
+
+/* ------- Dumosense Core Mark animations (calm, never alarming) ------- */
+@keyframes ds-sense {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.06); }
+}
+@keyframes ds-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes ds-breathe {
+    0%, 100% { opacity: 0.45; }
+    50% { opacity: 0.95; }
+}
+@keyframes ds-ripple {
+    0% { transform: scale(0.85); opacity: 0.55; }
+    70% { opacity: 0; }
+    100% { transform: scale(1.35); opacity: 0; }
+}
+@keyframes ds-fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ds-anim-sense { animation: ds-sense 3.4s cubic-bezier(0.4, 0, 0.6, 1) infinite; transform-origin: center; }
+.ds-anim-learn { animation: ds-spin 9s linear infinite; transform-origin: center; }
+.ds-anim-breathe { animation: ds-breathe 4.5s ease-in-out infinite; }
+.ds-anim-ripple { animation: ds-ripple 2.8s ease-out infinite; transform-origin: center; }
+.ds-fade-up { animation: ds-fade-up 0.7s ease both; }
+
+html[data-reduced-motion="true"] .ds-anim-sense,
+html[data-reduced-motion="true"] .ds-anim-learn,
+html[data-reduced-motion="true"] .ds-anim-breathe,
+html[data-reduced-motion="true"] .ds-anim-ripple,
+html[data-reduced-motion="true"] .ds-fade-up {
+    animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+    .ds-anim-sense, .ds-anim-learn, .ds-anim-breathe, .ds-anim-ripple, .ds-fade-up {
+        animation: none !important;
+    }
+}
+
+.ds-wordmark { font-family: 'Outfit', sans-serif; letter-spacing: 0.28em; font-weight: 300; }
+.ds-wordmark-tagline { font-family: 'Outfit', sans-serif; letter-spacing: 0.34em; font-weight: 300; text-transform: capitalize; }
+
+/* subtle grain-free premium ambient glow used sparingly behind hero */
+.ds-ambient {
+    background:
+        radial-gradient(60% 50% at 20% 20%, rgba(181, 108, 130, 0.18), transparent 70%),
+        radial-gradient(50% 45% at 85% 15%, rgba(229, 184, 194, 0.22), transparent 70%);
+}
+.dark .ds-ambient {
+    background:
+        radial-gradient(60% 50% at 20% 20%, rgba(90, 48, 69, 0.5), transparent 70%),
+        radial-gradient(50% 45% at 85% 15%, rgba(181, 108, 130, 0.22), transparent 70%);
+}
+
+*:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
+
+
+/* ------- Story motion: gentle scroll-reveal for the landing page ------- */
+.ds-reveal {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+}
+.ds-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+html[data-reduced-motion="true"] .ds-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+    .ds-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}

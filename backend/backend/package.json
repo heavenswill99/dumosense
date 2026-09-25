@@ -1,0 +1,14 @@
+{
+  "name": "dumosense-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local authentication API for Dumosense",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
