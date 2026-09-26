@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260926T143802_134359Z",
+  "pipeline_version": "STAT_ENGINE_MVP_1.0",
+  "model_name": "rt",
+  "fit": {
+    "status": "fitted",
+    "outcome": "log median RT",
+    "attempts": [
+      {
+        "optimizer": "lbfgs",
+        "status": "failed",
+        "error": "Singular matrix"
+      },
+      {
+        "optimizer": "bfgs",
+        "status": "converged"
+      }
+    ],
+    "formula": "np.log(median_reaction_time_ms) ~ time_days + C(difficulty_level)",
+    "converged": true,
+    "n_observations": 45775,
+    "n_users": 7999,
+    "log_likelihood": 35772.44979240981,
+    "AIC": null,
+    "BIC": null,
+    "AIC_BIC_note": "Unavailable by design for REML",
+    "random_effect_variance": 7.515075488198266e-05,
+    "residual_variance": 0.012175637897565884,
+    "fixed_effect_variance": 0.00458512373131265,
+    "ICC": 0.0061343605717144225,
+    "marginal_R2": 0.27234186225246343,
+    "conditional_R2": 0.2768055796423491,
+    "variance_convention": "population variance of X beta (ddof=0), random intercept REML variance, residual REML variance",
+    "RMSE_in_sample": 0.1100088883310141,
+    "MAE_in_sample": 0.08758403376006829,
+    "prediction_mode": "conditional (fixed and fitted random effects)",
+    "coefficients": {
+      "Intercept": 6.524243350306876,
+      "C(difficulty_level)[T.2]": 0.0656957926862929,
+      "C(difficulty_level)[T.3]": 0.12496271544146756,
+      "C(difficulty_level)[T.4]": 0.18185988141885992,
+      "time_days": -3.6501899791225944e-06
+    },
+    "std_errors": {
+      "Intercept": 0.0016842918240597274,
+      "C(difficulty_level)[T.2]": 0.0014649358446484904,
+      "C(difficulty_level)[T.3]": 0.0014655096125724414,
+      "C(difficulty_level)[T.4]": 0.0014616258636427223,
+      "time_days": 6.027111698818186e-06
+    },
+    "confidence_intervals": {
+      "Intercept": [
+        6.520942198992264,
+        6.527544501621488
+      ],
+      "C(difficulty_level)[T.2]": [
+        0.0628245711911201,
+        0.0685670141814657
+      ],
+      "C(difficulty_level)[T.3]": [
+        0.12209036938182832,
+        0.1278350615011068
+      ],
+      "C(difficulty_level)[T.4]": [
+        0.17899514736724792,
+        0.18472461547047192
+      ],
+      "time_days": [
+        -1.546311183960626e-05,
+        8.16273188136107e-06
+      ]
+    },
+    "optimizer": "bfgs",
+    "max_iterations": 100,
+    "ML_REML": "REML"
+  },
+  "inference": {
+    "scope": "population fixed effects; fitted user random intercepts are not exported",
+    "time_days_origin_utc": "2025-09-16T13:24:00+00:00",
+    "time_days_source": "started_at",
+    "difficulty_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cognitive_domains": null,
+    "reference_difficulty": 1,
+    "reference_domain": null,
+    "link": "log",
+    "output": "median_reaction_time_ms"
+  }
+}
