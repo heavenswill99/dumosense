@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260926T143802_134359Z",
+  "pipeline_version": "STAT_ENGINE_MVP_1.0",
+  "model_name": "accuracy_binomial_clustered",
+  "fit": {
+    "status": "fitted",
+    "converged": true,
+    "n_observations": 45775,
+    "formula": "trial successes/failures ~ time_days + difficulty + domain",
+    "coefficients": {
+      "Intercept": 1.7120965771711292,
+      "C(difficulty_level)[T.2]": -0.16037475766297232,
+      "C(difficulty_level)[T.3]": -0.3165506943175405,
+      "C(difficulty_level)[T.4]": -0.4698297739256395,
+      "C(cognitive_domain)[T.executive_function]": 0.008025121469119708,
+      "C(cognitive_domain)[T.language]": 0.003841858754252161,
+      "C(cognitive_domain)[T.memory]": 0.011370864955824192,
+      "C(cognitive_domain)[T.processing_speed]": 0.010168753249600926,
+      "time_days": -4.1167300364778426e-05
+    },
+    "std_errors": {
+      "Intercept": 0.013102623143125275,
+      "C(difficulty_level)[T.2]": 0.010344049774888153,
+      "C(difficulty_level)[T.3]": 0.010107124591850598,
+      "C(difficulty_level)[T.4]": 0.009924807873050515,
+      "C(cognitive_domain)[T.executive_function]": 0.010747945509848082,
+      "C(cognitive_domain)[T.language]": 0.010702558230326082,
+      "C(cognitive_domain)[T.memory]": 0.010760567080567482,
+      "C(cognitive_domain)[T.processing_speed]": 0.010774257754633405,
+      "time_days": 4.107213822314197e-05
+    },
+    "confidence_intervals": {
+      "Intercept": [
+        1.6864159077076026,
+        1.7377772466346557
+      ],
+      "C(difficulty_level)[T.2]": [
+        -0.18064872267604276,
+        -0.14010079264990188
+      ],
+      "C(difficulty_level)[T.3]": [
+        -0.3363602945048268,
+        -0.29674109413025423
+      ],
+      "C(difficulty_level)[T.4]": [
+        -0.4892820399102981,
+        -0.4503775079409809
+      ],
+      "C(cognitive_domain)[T.executive_function]": [
+        -0.013040464637981523,
+        0.02909070757622094
+      ],
+      "C(cognitive_domain)[T.language]": [
+        -0.017134769919629696,
+        0.024818487428134018
+      ],
+      "C(cognitive_domain)[T.memory]": [
+        -0.009719458975315388,
+        0.03246118888696377
+      ],
+      "C(cognitive_domain)[T.processing_speed]": [
+        -0.010948403909631938,
+        0.031285910408833786
+      ],
+      "time_days": [
+        -0.00012166721205018763,
+        3.933261132063078e-05
+      ]
+    },
+    "deviance": 64515.59381431769,
+    "note": "Bounded binomial mean, user-clustered SE, descriptive in-sample model"
+  },
+  "inference": {
+    "scope": "population fixed effects; fitted user random intercepts are not exported",
+    "time_days_origin_utc": "2025-09-16T13:24:00+00:00",
+    "time_days_source": "started_at",
+    "difficulty_levels": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "cognitive_domains": [
+      "attention",
+      "executive_function",
+      "language",
+      "memory",
+      "processing_speed"
+    ],
+    "reference_difficulty": 1,
+    "reference_domain": "attention",
+    "link": "logit",
+    "output": "probability_correct_per_trial"
+  }
+}
