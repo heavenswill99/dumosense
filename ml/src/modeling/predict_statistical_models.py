@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 MODEL_NAMES = ("accuracy", "rt", "rt_clustered_ols", "accuracy_binomial_clustered")
 
 
@@ -65,7 +65,7 @@ def main() -> None:
     parser.add_argument("--domain")
     args = parser.parse_args()
     pointer = json.loads((ROOT / "outputs" / "latest_successful_run.json").read_text(encoding="utf-8"))
-    bundle = args.bundle or ROOT / "model_artifacts" / pointer["run_id"]
+    bundle = args.bundle or ROOT / "weights" / pointer["run_id"]
     model = load_bundle_model(bundle, args.model)
     value = population_prediction(model, started_at=args.started_at,
                                   difficulty_level=args.difficulty, cognitive_domain=args.domain)
