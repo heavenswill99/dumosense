@@ -1,6 +1,6 @@
 # Dumosense MindGuard ML
 
-This folder contains the reproducible **statistical development baseline** for MindGuard. It turns synthetic cognitive session data into personal history summaries, fits descriptive statistical models, and measures change detection against synthetic interval labels. It is intended for engineering and model research. The present change detector does not support automatic user alerts.
+This folder contains the reproducible **statistical baseline and five-family ML benchmark** for MindGuard. It turns synthetic cognitive session data into personal history summaries, fits descriptive statistical models, and evaluates supervised and anomaly models against synthetic scenario labels. It is intended for engineering and model research. The present change detectors do not support automatic user alerts.
 
 The current reference run is `20260926T143802_134359Z`, produced by `STAT_ENGINE_MVP_1.0` on 26 September 2026. Its run manifest, metrics, detailed session output, logs, and plots are under `outputs/runs/20260926T143802_134359Z/` on the development machine. `outputs/latest_successful_run.json` points to the most recent completed run. These generated files are intentionally excluded from Git.
 
@@ -12,13 +12,18 @@ The current reference run is `20260926T143802_134359Z`, produced by `STAT_ENGINE
 | `src/mvp_pipeline.py` | End to end run orchestration, split and label alignment, four statistical fits, metrics, SHAP fidelity study, reports, and failure tracking. |
 | `src/insight_adapter.py` | Example nonclinical session summary adapter with user identity and consent checks at its boundary. |
 | `src/verify_run.py` | Independent read only verification of a completed run's hashes, baselines, and confusion counts. |
-| `src/save_model_artifacts.py` | Packages model parameters from a verified run and recreates the fidelity surrogate. |
-| `src/predict_statistical_models.py` | Loads a saved statistical parameter bundle and calculates a population prediction. |
-| `model_artifacts/<run_id>/` | Small, versioned model files and their hash manifest. |
+| `src/modeling/save_model_artifacts.py` | Packages model parameters from a verified run and recreates the fidelity surrogate. |
+| `src/modeling/predict_statistical_models.py` | Loads a saved statistical parameter bundle and calculates a population prediction. |
+| `README_ML.md` | Five-family supervised and anomaly benchmark, test metrics, saved weights, and interpretation. |
+| `src/modeling/train_ml_models.py` | Trains Logistic/linear, Random Forest, CatBoost, LightGBM, and Isolation Forest benchmarks. |
+| `src/modeling/package_ml_models.py` | Exports verified ML weights and aggregate metrics without session-level data. |
+| `src/modeling/tune_ml_models.py` | Bounded development-only tuning for the five model families. |
+| `src/modeling/verify_ml_run.py` | Independently checks package hashes and test metrics. |
+| `weights/<run_id>/` | Versioned statistical and ML weight packages; each includes an integrity manifest. |
 | `tests/test_mvp*.py` | Unit and failure lifecycle tests for the active worker. |
 | `README_MVP.md` | Short operational and release boundary note. |
 
-Older `engine_v1.py`, `engine_v2.py`, and exploratory scripts remain locally for reference. The supported entry point is `engine_v3.py`.
+Older V1/V2 and exploratory scripts were archived outside this ML folder under `C:\Users\HP\Downloads\dumosense\old_logs\ml_legacy_source_20260926`. The supported statistical entry point is `engine_v3.py`; the active model tools are in `src/modeling/`.
 
 ## Data and timing contract
 
@@ -30,7 +35,7 @@ The run divides users deterministically into train, development, and test groups
 
 ## Saved model parameters
 
-The original run recorded coefficients, uncertainty, variance terms, diagnostics, and evaluation JSON, but had no dedicated model package. `model_artifacts/20260926T143802_134359Z/` now contains:
+The original run recorded coefficients, uncertainty, variance terms, diagnostics, and evaluation JSON, but had no dedicated model package. `weights/20260926T143802_134359Z/` now contains:
 
 | File | Meaning | Prediction output |
 | --- | --- | --- |
@@ -86,13 +91,13 @@ python .\src\verify_run.py .\outputs\runs\20260926T143802_134359Z
 Package the latest verified run's models (the default destination must not already exist):
 
 ```powershell
-python .\src\save_model_artifacts.py
+python .\src\modeling\save_model_artifacts.py
 ```
 
 For this existing bundle, a population prediction can be calculated as follows:
 
 ```powershell
-python .\src\predict_statistical_models.py --model accuracy_binomial_clustered --started-at '2026-05-01T12:00:00+00:00' --difficulty 2 --domain attention
+python .\src\modeling\predict_statistical_models.py --model accuracy_binomial_clustered --started-at '2026-05-01T12:00:00+00:00' --difficulty 2 --domain attention
 ```
 
 That prediction is a descriptive expected trial accuracy from synthetic training data. It is not a personal change score. Historical personal baselines also require the user's earlier sessions and should be generated by the worker. The `insight_adapter.py` gives only a descriptive same domain summary; application authentication and current consent must be enforced by the backend.
@@ -107,4 +112,4 @@ The `outputs/` directory is ignored by Git because it contains large generated f
 
 The current worker is a tested development foundation. It does not include the live authenticated API, consent lifecycle, deployment monitoring, or an externally validated detector. The latest run's release status is `internal_validation_only`; patient facing automatic alerts remain blocked. See the repository's `docs/api-data-contracts.md` for the proposed application interface.
 
-The planned **five machine learning models** are a separate next phase. They have not been trained or saved by this package. Before building them, define each target and outcome, reuse the user/time split without leakage, set regression and classification baselines, and report both held out metrics and calibration where appropriate. Keep model weights, preprocessing, feature schema, and evaluation provenance together for each model. A high score on the fidelity surrogate must never be presented as performance against change labels.
+The five machine learning model families have now been trained as a **separate synthetic benchmark**. See `README_ML.md` for targets, held out classification and regression metrics, package location, and interpretation. Their scores do not change the `internal_validation_only` release boundary. A high score on the older fidelity surrogate must never be presented as performance against change labels.

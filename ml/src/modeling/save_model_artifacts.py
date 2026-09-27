@@ -19,7 +19,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, balanced_accuracy_score, confusion_matrix, f1_score
 
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 FEATURES = ["per_domain_z", "cross_domain_z", "rt_z"]
 MODEL_NAMES = ["accuracy", "rt", "rt_clustered_ols", "accuracy_binomial_clustered"]
 
@@ -190,7 +190,7 @@ def main() -> None:
     args = parser.parse_args()
     pointer = json.loads((ROOT / "outputs" / "latest_successful_run.json").read_text(encoding="utf-8"))
     run = args.run or Path(pointer["path"])
-    destination = args.destination or ROOT / "model_artifacts" / pointer["run_id"]
+    destination = args.destination or ROOT / "weights" / pointer["run_id"]
     bundle = export(run, destination)
     print(json.dumps({"destination": str(destination), "model_inventory": bundle["model_inventory"],
                       "surrogate_replay": bundle["surrogate_replay"]}, indent=2))
