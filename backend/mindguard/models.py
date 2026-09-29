@@ -166,4 +166,80 @@ class CognitiveResult(models.Model):
     def __str__(self):
         return f"{self.cognitive_result_id} - {self.session_id}"
 
+class WellbeingCheckin(models.Model):
+    checkin_id = models.CharField(max_length=20, primary_key=True)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="wellbeing_checkins",
+        db_column="user_id",
+    )
+
+    recorded_at = models.DateTimeField()
+
+    mood_level = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    stress_level = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    anxiety_level = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    sleep_quality = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    sleep_hours = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    social_wellbeing = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+    perceived_cognitive_change = models.DecimalField(
+        max_digits=4, decimal_places=2, null=True, blank=True
+    )
+
+    completion_status = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = "wellbeing_checkins"
+
+    def __str__(self):
+        return self.checkin_id
+
+
+class ContextRecord(models.Model):
+    context_id = models.CharField(max_length=20, primary_key=True)
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="context_records",
+        db_column="user_id",
+    )
+
+    related_session = models.ForeignKey(
+        AssessmentSession,
+        on_delete=models.PROTECT,
+        related_name="context_records",
+        db_column="related_session_id",
+        null=True,
+        blank=True,
+    )
+
+    recorded_at = models.DateTimeField()
+
+    context_type = models.CharField(max_length=50)
+    context_value = models.CharField(max_length=255, null=True, blank=True)
+    source = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = "context_records"
+
+    def __str__(self):
+        return self.context_id
+
 # Create your models here.
