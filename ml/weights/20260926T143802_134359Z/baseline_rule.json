@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260926T143802_134359Z",
+  "purpose": "Historical personal baseline and development-selected research rule; no learned neural weights",
+  "config": {
+    "min_obs_baseline": 3,
+    "z_threshold": 2.0,
+    "persistence_required": 2,
+    "mad_scale": 1.4826,
+    "epsilon": 1e-08,
+    "seed": 42
+  },
+  "selection": {
+    "strategy": "hybrid",
+    "threshold": 1.5,
+    "balanced_accuracy": 0.5498739363378506,
+    "cutoff": "2026-05-26T03:30:26+00:00",
+    "split": "SHA256 user groups 60/20/20; development/test evaluation after frozen training cutoff",
+    "target": "any accuracy or RT deviation; not diagnosis"
+  },
+  "heldout": {
+    "n": 654,
+    "TP": 35,
+    "TN": 357,
+    "FP": 168,
+    "FN": 94,
+    "sensitivity": 0.2713178294573643,
+    "specificity": 0.68,
+    "FPR": 0.32,
+    "precision": 0.1724137931034483,
+    "f1": 0.21084337349397592,
+    "balanced_accuracy": 0.47565891472868216,
+    "evaluable": {
+      "n": 531,
+      "TP": 35,
+      "TN": 262,
+      "FP": 168,
+      "FN": 66,
+      "sensitivity": 0.3465346534653465,
+      "specificity": 0.6093023255813953,
+      "FPR": 0.39069767441860465,
+      "precision": 0.1724137931034483,
+      "f1": 0.23026315789473684,
+      "balanced_accuracy": 0.4779184895233709
+    },
+    "coverage": 0.8119266055045872,
+    "abstentions": 123,
+    "convention": "E2E: abstention mapped to no alert; conditional metrics exclude abstentions",
+    "false_negative_reasons": {
+      "deviation_below_threshold": 66,
+      "insufficient_history": 27,
+      "degenerate_scale": 1
+    },
+    "false_negative_reasons_sum": 94,
+    "fn_reconciled": true,
+    "confidence": {
+      "method": "percentile bootstrap resampling users with all their sessions",
+      "iterations": 400,
+      "users": 280,
+      "intervals_95": {
+        "sensitivity": [
+          0.1908306070519811,
+          0.34645864192718484
+        ],
+        "specificity": [
+          0.6386768211150514,
+          0.7156182994129846
+        ],
+        "balanced_accuracy": [
+          0.43543600506899366,
+          0.5217206579197496
+        ]
+      }
+    },
+    "always_no_alert": {
+      "n": 654,
+      "TP": 0,
+      "TN": 525,
+      "FP": 0,
+      "FN": 129,
+      "sensitivity": 0.0,
+      "specificity": 1.0,
+      "FPR": 0.0,
+      "precision": null,
+      "f1": 0.0,
+      "balanced_accuracy": 0.5
+    }
+  },
+  "reference_file": "training_reference.csv"
+}

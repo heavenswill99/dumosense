@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "created_at": "2026-09-26T16:43:09.910199+00:00",
+  "source_run_id": "20260926T143802_134359Z",
+  "source_manifest_sha256": "e43055eb3812f875f6df77522a4d8a727c39e579b76f4f04c43928edd45dba27",
+  "pipeline_version": "STAT_ENGINE_MVP_1.0",
+  "release_status": "internal_validation_only",
+  "model_inventory": [
+    "accuracy",
+    "rt",
+    "rt_clustered_ols",
+    "accuracy_binomial_clustered",
+    "baseline_rule",
+    "fidelity_surrogate"
+  ],
+  "surrogate_replay": {
+    "accuracy": 0.9953239812959251,
+    "macro_f1": 0.9942901200932848,
+    "balanced_accuracy": 0.9953265491214687,
+    "classes": [
+      "stable_pattern",
+      "temporary_change"
+    ],
+    "confusion_matrix": [
+      [
+        2127,
+        10
+      ],
+      [
+        4,
+        853
+      ]
+    ]
+  },
+  "artifact_hashes": {
+    "accuracy.json": "1427b4084de1a2c33fcae72adbec736d5df4ace362fe2f605373d80e2b482b20",
+    "rt.json": "5d7886c43adabd3517bdcc9b0a4f927fa9f3f28ab19d9a6acdaace0d74ed234f",
+    "rt_clustered_ols.json": "e6ee5340da32fc279b8e1728b53788871a10264509629291201d2645592fc7c8",
+    "accuracy_binomial_clustered.json": "b0d53adbd231a1273e75a92da5cf9b8d57c9303b731dede763c8e74ee9aea632",
+    "baseline_rule.json": "12b1c756ff511c6ca2d9c9b2eb9d52e776810408e7fb897ef8643ba42243b054",
+    "training_reference.csv": "35b1a1b47cdde8574320e2f1009f64eecbd0e347c48f1d91ddb9fe31fe4e4158",
+    "fidelity_surrogate.joblib": "15e06d344a104d7f1fb12be3422b376abe37a52e749dde4afb267f2fe213b857"
+  },
+  "notes": [
+    "Four statistical fits are represented by coefficient/variance JSON, not serialized statsmodels objects.",
+    "Mixed-model population predictions exclude user random intercepts.",
+    "The rule uses prior user observations and a training reference; it has no global learned weights.",
+    "The surrogate learns the engine output, not clinical ground truth."
+  ]
+}

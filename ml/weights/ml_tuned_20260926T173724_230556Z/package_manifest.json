@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "source_ml_run_id": "ml_tuned_20260926T173724_230556Z",
+  "statistical_source_run": "20260926T143802_134359Z",
+  "statistical_source_manifest_sha256": "e43055eb3812f875f6df77522a4d8a727c39e579b76f4f04c43928edd45dba27",
+  "release_status": "engineering_validation_only",
+  "model_families": [
+    "linear",
+    "random_forest",
+    "catboost",
+    "lightgbm",
+    "isolation_forest"
+  ],
+  "estimators": [
+    "catboost_accuracy_regressor.joblib",
+    "catboost_classifier.joblib",
+    "catboost_rt_regressor.joblib",
+    "isolation_forest.joblib",
+    "lightgbm_accuracy_regressor.joblib",
+    "lightgbm_classifier.joblib",
+    "lightgbm_rt_regressor.joblib",
+    "linear_accuracy_regressor.joblib",
+    "linear_classifier.joblib",
+    "linear_rt_regressor.joblib",
+    "random_forest_accuracy_regressor.joblib",
+    "random_forest_classifier.joblib",
+    "random_forest_rt_regressor.joblib"
+  ],
+  "dependencies": {
+    "sklearn": "1.9.0",
+    "catboost": "1.2.10",
+    "lightgbm": "4.7.0"
+  },
+  "source_sha256": {
+    "train_ml_models.py": "fc040d60144e24b5616378d70e545048a912a16a7fdc111f9ecddf4934efff5e",
+    "tune_ml_models.py": "275e1789bdde00dbd4202d0fdcb3e05b9dd8f2700d035042cb10547c5c31a1d4",
+    "package_ml_models.py": "8c900f3f4af82008e214f46c088f36fab082b7984a9ec846c0a3919d90f4d744",
+    "verify_ml_run.py": "df0a50aa50593ae220928e5a2cd5c859af60839355a964c5f570f98f5e395d17"
+  },
+  "files": {
+    "metrics.json": {
+      "bytes": 16544,
+      "sha256": "06076b994888f7ae3e809f1a52a4d7cdb92202137601821992ff986e5c027316"
+    },
+    "weights/catboost_accuracy_regressor.joblib": {
+      "bytes": 50164,
+      "sha256": "3506ef47699e6054ac6230b56abae4949314009c4339d2a8b2f4ce5fb19f4fd1"
+    },
+    "weights/catboost_classifier.joblib": {
+      "bytes": 50574,
+      "sha256": "9b396152e799da2a03c9d961643c88e3c9d78c2f420b44ffd8dad476207c5a8c"
+    },
+    "weights/catboost_rt_regressor.joblib": {
+      "bytes": 117556,
+      "sha256": "152403d723edb061c43380222dfe0ea24b3341e20e61bbce179d4641165f1ad5"
+    },
+    "weights/isolation_forest.joblib": {
+      "bytes": 1122829,
+      "sha256": "1b1b3591aa12e8536628918097f15f42e86ad562d46400ef36dd31ae0f49b870"
+    },
+    "weights/lightgbm_accuracy_regressor.joblib": {
+      "bytes": 135914,
+      "sha256": "4b567f8290f67d923d21bfb38260876a5de9d0115d3b2b7b9628600eb884fcf5"
+    },
+    "weights/lightgbm_classifier.joblib": {
+      "bytes": 377988,
+      "sha256": "2b7b0b157821110ba6949def287ed9ed018fc66e348bd053ad67a893d200a583"
+    },
+    "weights/lightgbm_rt_regressor.joblib": {
+      "bytes": 134242,
+      "sha256": "f7be68212a9b3b20ae623444e467be20c85e6fdd2765b108d8a69412f2a7881b"
+    },
+    "weights/linear_accuracy_regressor.joblib": {
+      "bytes": 2596,
+      "sha256": "e282fcd155877d6985c8e04e7ef2586a11cf81392d111bceb7e1892e6f6bf297"
+    },
+    "weights/linear_classifier.joblib": {
+      "bytes": 3034,
+      "sha256": "64f787893131d36a560d85ec6f3f350707bb2c68644d92e8ff8759987f4099e8"
+    },
+    "weights/linear_rt_regressor.joblib": {
+      "bytes": 2594,
+      "sha256": "c6cc12c12c4582a639e6386e959c183a1058573fc70ed1baa0da5e55f41b9efd"
+    },
+    "weights/random_forest_accuracy_regressor.joblib": {
+      "bytes": 659163,
+      "sha256": "6a69ca0c00811aa74f3538e5f15be98c623e68548c3dabfe07a8b43f64aeea58"
+    },
+    "weights/random_forest_classifier.joblib": {
+      "bytes": 1143685,
+      "sha256": "c33e0cc9df318c93712e917daa505e4c7cc70d64a6e0e36a4c649a010eadb530"
+    },
+    "weights/random_forest_rt_regressor.joblib": {
+      "bytes": 541539,
+      "sha256": "3cb5c04698d389a7fd65e34572a66847131a28f085e3e6704360d668f0b2ef90"
+    }
+  },
+  "note": "Contains aggregate metrics and fitted estimators only; no session or user-level predictions."
+}
