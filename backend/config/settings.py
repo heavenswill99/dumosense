@@ -86,6 +86,22 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 AUTH_USER_MODEL = "accounts.User"
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+}
+
+SIMPLE_JWT = {
+    "USER_ID_FIELD": "user_id",
+    "USER_ID_CLAIM": "user_id",
+}
+
+USERNAME_FIELD = "email"
+
 
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases

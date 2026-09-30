@@ -13,10 +13,47 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+
 """
+
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
+from accounts.views import UserProfileView, ProductEnrollmentListView
+from consent.views import ConsentListView, ConsentWithdrawView, ConsentGrantView
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+
+    # Authentication
+    path("api/v1/auth/", include("accounts.urls")),
+
+    # User profile
+    path("api/v1/profile/", UserProfileView.as_view(), name="user-profile"),
+
+    # Product enrollments
+    path(
+        "api/v1/products/",
+        ProductEnrollmentListView.as_view(),
+        name="user-products",
+    ),
+
+    #Consent
+    path("api/v1/consents/", ConsentListView.as_view(), name="user-consents"),
+
+    path(
+    "api/v1/consents/<str:consent_id>/withdraw/",
+    ConsentWithdrawView.as_view(),
+    name="withdraw-consent",
+    ),
+
+    path(
+    "api/v1/consents/<str:consent_id>/grant/",
+    ConsentGrantView.as_view(),
+    name="grant-consent"   
+    ),
+
+
 ]

@@ -1,3 +1,24 @@
-from django.shortcuts import render
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
+from .models import UserProfile, ProductEnrollment
+from .serializers import UserProfileSerializer, ProductEnrollmentSerializer
+
+
+class UserProfileView(generics.RetrieveAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return UserProfile.objects.select_related("user").get(
+            user=self.request.user
+        )
+
+class ProductEnrollmentListView(generics.ListAPIView):
+    serializer_class = ProductEnrollmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return ProductEnrollment.objects.filter(
+            user=self.request.user
+        ).order_by("enrolled_at")
