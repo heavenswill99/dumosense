@@ -51,6 +51,13 @@ class AgentTest(unittest.TestCase):
         fake=FakeModel({"text":"You have dementia.","action_class":"review_history","evidence_ids":[]})
         x=run("my memory",local_model=fake,**self.inputs())
         self.assertEqual(x["status"],"generation_rejected")
+    def test_combined_generation_cannot_omit_a_product(self):
+        baseline = run("overall", **self.inputs())
+        mind_only = baseline["context"]["states"][0]["observation"]
+        fake = FakeModel({"text": mind_only, "action_class": "review_history",
+                          "evidence_ids": []})
+        self.assertEqual(run("overall", local_model=fake,
+                             **self.inputs())["status"], "generation_rejected")
     def test_generation_rejects_unapproved_action_or_fake_citation(self):
         for bad in [{"text":"Review your history.","action_class":"buy_insurance","evidence_ids":[]},
                     {"text":"Review your history.","action_class":"review_history","evidence_ids":["made-up"]}]:

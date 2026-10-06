@@ -81,7 +81,7 @@ class CentralServiceTest(SimpleTestCase):
 
     @override_settings(DUMOSENSE_ENABLE_LOCAL_MODEL=True)
     def test_local_model_is_opt_in_and_keeps_the_existing_policy_gate(self):
-        model_output = {"text": "Review your recorded result.",
+        model_output = {"text": "This session accuracy was 80.0%. A same-domain comparison is not available yet.",
                         "action_class": "review_history", "evidence_ids": []}
         with self.access, self.run_write, self.insight_write, self.action_write, \
              self.event_write, patch("intelligence.services.READERS", \

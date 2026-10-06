@@ -27,6 +27,8 @@ class OllamaExplanationModelTest(unittest.TestCase):
                          ["text", "action_class", "evidence_ids"])
         self.assertEqual(payload["format"]["properties"]["action_class"]["enum"],
                          ["review_history"])
+        self.assertEqual(payload["format"]["properties"]["evidence_ids"]["maxItems"], 0)
+        self.assertNotIn("enum", payload["format"]["properties"]["evidence_ids"]["items"])
         self.assertEqual(payload["options"]["num_ctx"], 2048)
 
     def test_malformed_response_fails_closed(self):

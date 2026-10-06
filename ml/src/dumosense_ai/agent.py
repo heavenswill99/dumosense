@@ -55,6 +55,8 @@ def validate_generation(value: dict, context: dict) -> dict:
     numbers = set(re.findall(r"(?<![\w])\d+(?:\.\d+)?%?", json.dumps(context["states"])))
     if set(re.findall(r"(?<![\w])\d+(?:\.\d+)?%?", body)) - numbers:
         raise ValueError("Unverified number")
+    if any(state["observation"] not in body for state in context["states"]):
+        raise ValueError("Requested product observation omitted or altered")
     return value
 
 def run(query: str, *, authenticated_user_id: str, trusted_access: dict,

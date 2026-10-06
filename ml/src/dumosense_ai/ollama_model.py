@@ -21,13 +21,18 @@ class OllamaExplanationModel:
             raise ValueError("A structured product state is required")
         allowed = context.get("allowed_actions", [])
         evidence_ids = [item["source_id"] for item in context.get("evidence", [])]
+        evidence_items = ({"type": "string", "enum": evidence_ids}
+                          if evidence_ids else {"type": "string"})
+        evidence_list = {"type": "array", "items": evidence_items,
+                         "uniqueItems": True}
+        if not evidence_ids:
+            evidence_list["maxItems"] = 0
         schema = {
             "type": "object", "additionalProperties": False,
             "properties": {
                 "text": {"type": "string", "maxLength": 1200},
                 "action_class": {"type": "string", "enum": allowed},
-                "evidence_ids": {"type": "array", "items": {"type": "string", "enum": evidence_ids},
-                                 "uniqueItems": True},
+                "evidence_ids": evidence_list,
             },
             "required": ["text", "action_class", "evidence_ids"],
         }
@@ -35,7 +40,10 @@ class OllamaExplanationModel:
             "Explain only the supplied Dumosense product observations. The product "
             "calculations are authoritative; do not recompute them. Do not diagnose, "
             "predict disease, prescribe treatment, promise outcomes, or give financial "
-            "advice. State uncertainty plainly. Do not add numbers that are absent from "
+            "advice. Copy the observation of EVERY supplied state verbatim into the "
+            "text field, in the same order, separated by spaces. Do not omit, alter, "
+            "or merge any observation. You may add one short uncertainty sentence "
+            "after all observations. Do not add numbers that are absent from "
             "the states. Evidence IDs must refer only to the supplied approved excerpts; "
             "use an empty list when none are supplied. Return only JSON matching the schema."
         )

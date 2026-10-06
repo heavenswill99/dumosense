@@ -14,6 +14,7 @@ django.setup()
 
 from datetime import timedelta
 from decimal import Decimal
+from django.conf import settings
 from django.db import connection
 from django.utils import timezone
 from accounts.models import User, ProductEnrollment
@@ -83,8 +84,20 @@ def main() -> None:
         pass
     else:
         raise AssertionError("Withdrawn reserve consent must block retrieval")
+    if os.getenv("DUMOSENSE_SMOKE_LOCAL_MODEL") == "1":
+        settings.DUMOSENSE_ENABLE_LOCAL_MODEL = True
+        generated = query_agent(user=user, question="my memory")
+        assert generated["status"] == "generated", generated
+        model_counts = [model.objects.count() for model in
+                        (IntelligenceRun, Insight, Recommendation, Event)]
+        assert model_counts == [3, 3, 3, 3], model_counts
+        print({"local_model_status": generated["status"],
+               "source_run_ids": generated["source_run_ids"],
+               "response": generated["response"]})
+    final_counts = [model.objects.count() for model in
+                    (IntelligenceRun, Insight, Recommendation, Event)]
     print({"status": "passed", "database": "disposable SQLite memory",
-           "runs_insights_recommendations_events": counts,
+           "runs_insights_recommendations_events": final_counts,
            "withdrawn_product_hidden": True})
 
 

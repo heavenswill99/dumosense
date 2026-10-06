@@ -27,18 +27,18 @@ The near-term target is a laptop demonstration with a local MedGemma model. The 
 - The agent routes MindGuard, Health Reserve, and combined questions to fixed product tools. It checks trusted identity, enrollment, consent, source run, and response format. When no language model is enabled, it returns a deterministic product observation.
 - An optional adapter calls Ollama **only at `http://127.0.0.1:11434`**, requesting a bounded JSON explanation. A rejected model response does not become a successful generated answer.
 - The backend query endpoint and local-model integration both default to **off**. Backend contract tests and an in-memory database smoke test have passed; a real MySQL integration has **not** been validated.
-- No MedGemma weights have been downloaded by this project. The selected laptop tag is `medgemma1.5:4b-it-q4_K_M`.
+- No MedGemma weights are committed or downloaded by this project. The model owner installed the selected laptop tag, `medgemma1.5:4b-it-q4_K_M`, in their local Ollama store. Synthetic MindGuard and Health Reserve requests passed the agent policy gate, including a model-on disposable SQLite ORM check; combined requests can be rejected when the model omits one product.
 
 The current backend in this checkout uses **Django ORM and MySQL**, not Djongo/MongoDB. Resolve the intended database branch and validate its real schema and authentication before deployment. The checked-in Django settings are development settings and must not be exposed as a public service. Supply a unique `DJANGO_SECRET_KEY` through the local environment; the repository contains only a development fallback.
 
 ## Laptop setup: local explanation model
 
-Use Python 3.11 and Ollama on Windows. The laptop smoke test uses synthetic data only and does not require MySQL. The model owner should review the [Google MedGemma model card and terms](https://huggingface.co/google/medgemma-1.5-4b-it) and download the [Ollama 4-bit MedGemma 1.5 tag](https://ollama.com/library/medgemma1.5/tags) themselves:
+Use Python 3.11 and Ollama on Windows. The laptop smoke test uses synthetic data only and does not require MySQL. Each developer should review the [Google MedGemma model card and terms](https://huggingface.co/google/medgemma-1.5-4b-it) before downloading the [Ollama 4-bit MedGemma 1.5 tag](https://ollama.com/library/medgemma1.5/tags). From a PowerShell window, with the cloned repository as the current directory:
 
 ```powershell
 ollama pull medgemma1.5:4b-it-q4_K_M
 ollama list
-Set-Location 'C:\Users\HP\Downloads\dumosense\ml'
+Set-Location .\ml
 $env:PYTHONPATH = (Resolve-Path .\src).Path
 python -m dumosense_ai.local_smoke
 ```
@@ -49,20 +49,27 @@ Ollama must be running locally. The adapter does not use a remote inference endp
 
 ## Automated checks
 
-From the repository root, run the ML suite and backend contract tests:
+From the repository root, run the ML suite and backend contract tests. Install the pinned dependencies into local Python 3.11 environments first if needed:
 
 ```powershell
-Set-Location 'C:\Users\HP\Downloads\dumosense\ml'
+Set-Location .\ml
+py -3.11 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r .\requirements-ml.txt
 $env:PYTHONPATH = (Resolve-Path .\src).Path
-python -m unittest discover -s .\tests -p 'test_*.py' -q
+.\.venv\Scripts\python.exe -m unittest discover -s .\tests -p 'test_*.py' -q
 
 Set-Location '..\backend'
+py -3.11 -m venv venv
+.\venv\Scripts\python.exe -m pip install -r .\requirements.txt
 $env:DB_NAME = 'dumosense_test_dummy'
 .\venv\Scripts\python.exe manage.py check
 .\venv\Scripts\python.exe manage.py test intelligence
+.\venv\Scripts\python.exe intelligence\sqlite_smoke.py
 ```
 
-If `backend/venv` does not exist, create a Python 3.11 virtual environment and install `backend/requirements.txt` first. The dummy database name allows the current `SimpleTestCase` tests to initialize; it does not test a live MySQL instance. Other worker-specific commands and package verification are in the linked ML READMEs. Do not treat a passing unit suite as clinical or live-database validation.
+An existing environment need not be recreated or reinstalled on every run. The dummy database name allows the current `SimpleTestCase` tests to initialize; the SQLite script creates only disposable in-memory tables. Neither test connects to the configured MySQL instance. After installing MedGemma, an additional synthetic model-on ORM check is documented in the [backend README](backend/README_DUMOSENSE_AI.md). Other worker-specific commands and package verification are in the linked ML READMEs. Do not treat a passing unit suite as clinical or live-database validation.
+
+The last internal check on 6 October 2026 passed **71 ML tests**, **15 backend tests**, Django's system check, the model-off SQLite smoke test, and a model-on SQLite smoke test with one synthetic MindGuard record. The local model used CPU inference. Sampled Health Reserve and combined generations took about 34–43 seconds; this is not a formal performance benchmark. One combined generation omitted Health Reserve and was rejected, while another included both observations and passed. The generation gate prevents that incomplete answer from being accepted, but it does not make model output consistently complete.
 
 ## Optional internal Django integration
 
@@ -79,7 +86,7 @@ DUMOSENSE_ENABLE_LOCAL_MODEL=1
 
 Current output is marked `internal_validation_only`. The synthetic MindGuard change detector has missed many labelled changes and produced too many false positives for automatic alerts. Health Reserve has no real treatment-cost inputs, so its rank is a preparedness proxy, not a guarantee of affordability. The language model must not turn either result into a diagnosis, causal claim, treatment recommendation, or financial promise.
 
-Before a user-facing MVP, validate the actual backend/database branch, evaluate MedGemma on an independently reviewed set of product questions and failure cases, verify consent and data retention end to end, benchmark offline performance, and harden the Django deployment configuration. A later phone implementation will require mobile-compatible scoring/inference and on-device model packaging; the laptop Ollama adapter is a reference for that work.
+Before a user-facing MVP, validate the actual backend/database branch, evaluate MedGemma on an independently reviewed set of product questions and failure cases (including repeated combined queries), verify consent and data retention end to end, benchmark offline performance, and harden the Django deployment configuration. A later phone implementation will require mobile-compatible scoring/inference and on-device model packaging; the laptop Ollama adapter is a reference for that work.
 
 ## Publishing source
 
