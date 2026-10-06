@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dumosense controlled local explanation context",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "intent",
+    "states",
+    "evidence",
+    "allowed_actions",
+    "prohibited_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "intent": {
+      "enum": [
+        "mindguard",
+        "health_reserve",
+        "combined"
+      ]
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "product_code",
+          "source_run_id",
+          "source_record_id",
+          "model_version",
+          "observed_at",
+          "insight_type",
+          "observation",
+          "uncertainty"
+        ],
+        "properties": {
+          "product_code": {
+            "type": "string"
+          },
+          "source_run_id": {
+            "type": "string"
+          },
+          "source_record_id": {
+            "type": "string"
+          },
+          "model_version": {
+            "type": "string"
+          },
+          "observed_at": {
+            "type": "string"
+          },
+          "insight_type": {
+            "type": "string"
+          },
+          "observation": {
+            "type": "string"
+          },
+          "uncertainty": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "excerpt"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 600
+          }
+        }
+      }
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "review_history"
+        ]
+      }
+    },
+    "prohibited_claims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

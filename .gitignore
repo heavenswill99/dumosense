@@ -1,0 +1,19 @@
+# Local run products and archived logs (may contain session-level records).
+/old_logs/
+/outputs/
+
+# Language-model downloads belong in a runtime/model store, never Git.
+/models/
+*.gguf
+*.litertlm
+*.safetensors
+
+# Local credentials and environments.
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.log

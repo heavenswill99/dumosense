@@ -1,0 +1,18 @@
+{
+  "model_version": "HR_NEXT_ASSESSMENT_ML_1.0",
+  "source_run_id": "hr_ml_20261006T135923_863977Z",
+  "source_status_sha256": "2ff1f4c3bfd10030c5f95beb85b49c75933d27735c223177b8846f3532cd2f76",
+  "release_status": "synthetic_engineering_validation_only",
+  "files": {
+    "metrics.json": "bb46ab590802090ef1b7fca6e2459419d6e344cd92c7bd5647992c8a1a49e9ec",
+    "weights/catboost_classifier.joblib": "280bb0a8bfad013c74bffac2a181c3ad629f1269bad9e26289bba433081d22b4",
+    "weights/catboost_regressor.joblib": "712b5a68c3da5c804eb2e0f4cb0f9e5af951519e762de31819f207dc798d990b",
+    "weights/isolation_forest.joblib": "6972bb7203589a10f9471f8bd5d9181137f3d53c2e595766ef1c25cae7cdb826",
+    "weights/lightgbm_classifier.joblib": "3ffeeadfc8d9954508892ed384c79e30513b93c5de84203e46b6fbeecdd45d00",
+    "weights/lightgbm_regressor.joblib": "5fa9cb50a269ad489d1fc16485a5bbf1998e888669b6a157bf2d1657fb64324d",
+    "weights/linear_classifier.joblib": "a2cfeba7a790d7bd88cc9db52cc4b8f39af22d8d711b3941c3e6908cc92b9425",
+    "weights/linear_regressor.joblib": "735ad4344de5526820c4538911d9922afdd5c70c8136a00a6edbcc4451ce6566",
+    "weights/random_forest_classifier.joblib": "577a268b89796f8a9d440d9ccf34121a10a135adb6483f6e48827be6183d17fe",
+    "weights/random_forest_regressor.joblib": "c25eaa727ced953267105113f72c21ff8b4a5acf3f1c63bf444b3d17ddb9b38c"
+  }
+}

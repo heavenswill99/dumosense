@@ -7,8 +7,9 @@ Each versioned subfolder contains model parameters or fitted estimators and an i
 | `20260926T143802_134359Z/` | Statistical coefficients, baseline rule, training reference, and fidelity surrogate. |
 | `ml_20260926T170633_659162Z/` | Initial five-family benchmark: 13 estimators in `weights/`, metrics, and manifest. |
 | `ml_tuned_20260926T173724_230556Z/` | Bounded development-tuned benchmark: 13 estimators in `weights/`, metrics, and manifest. |
+| `hr_ml_20261006T135923_863977Z/` | Health Reserve next-assessment benchmark: 9 estimators in `weights/`, metrics, and manifest. |
 
-Both ML packages are retained. The initial CatBoost classifier had higher balanced accuracy on the repeatedly evaluated synthetic test users than the tuned CatBoost classifier; neither is approved for automatic alerts. Read [the benchmark report](../README_ML.md) before choosing a model. Verify the latest package with `python src/modeling/verify_ml_run.py` from `ml/`.
+Both MindGuard ML packages are retained. Their comparison is in [the MindGuard benchmark](../README_ML.md); neither is approved for automatic alerts. The separate Health Reserve package is explained in [its ML benchmark](../README_HEALTH_RESERVE_ML.md). From `ml/`, verify MindGuard with `python src/modeling/verify_ml_run.py` and Health Reserve with `python src/health_reserve/verify_ml_run.py`.
 
 `.joblib` files are Python pickle artifacts. Load only from a trusted source after verifying the package hash manifest. The package does not contain user-level predictions or raw run logs.
 

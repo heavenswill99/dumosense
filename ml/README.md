@@ -15,6 +15,11 @@ The current reference run is `20260926T143802_134359Z`, produced by `STAT_ENGINE
 | `src/modeling/save_model_artifacts.py` | Packages model parameters from a verified run and recreates the fidelity surrogate. |
 | `src/modeling/predict_statistical_models.py` | Loads a saved statistical parameter bundle and calculates a population prediction. |
 | `README_ML.md` | Five-family supervised and anomaly benchmark, test metrics, saved weights, and interpretation. |
+| `README_HEALTH_RESERVE.md` | Cost-free Health Reserve feature contract, 1-10 buffer rank, data audit, and limitations. |
+| `README_HEALTH_RESERVE_ML.md` | Five-family next-assessment ML benchmark, metrics, saved weights, and limitations. |
+| `README_DUMOSENSE_AI.md` | Shared, traceable nonclinical insight-composition component and backend boundary. |
+| `src/health_reserve/statistical_baseline.py` | Versioned Health Reserve rank and strictly prior personal median. |
+| `src/health_reserve/verify_run.py` | Independent recount of Health Reserve scores and run hashes. |
 | `src/modeling/train_ml_models.py` | Trains Logistic/linear, Random Forest, CatBoost, LightGBM, and Isolation Forest benchmarks. |
 | `src/modeling/package_ml_models.py` | Exports verified ML weights and aggregate metrics without session-level data. |
 | `src/modeling/tune_ml_models.py` | Bounded development-only tuning for the five model families. |
@@ -110,6 +115,6 @@ The `outputs/` directory is ignored by Git because it contains large generated f
 
 ## Release boundary and next work
 
-The current worker is a tested development foundation. It does not include the live authenticated API, consent lifecycle, deployment monitoring, or an externally validated detector. The latest run's release status is `internal_validation_only`; patient facing automatic alerts remain blocked. See the repository's `docs/api-data-contracts.md` for the proposed application interface.
+The current worker is a tested development foundation. It includes a default-off Django intelligence endpoint for internal validation, but not a live-MySQL-validated API, deployed consent lifecycle, deployment monitoring, or an externally validated detector. The latest run's release status is `internal_validation_only`; patient facing automatic alerts remain blocked. See the repository's `docs/api-data-contracts.md` for the proposed application interface.
 
 The five machine learning model families have now been trained as a **separate synthetic benchmark**. See `README_ML.md` for targets, held out classification and regression metrics, package location, and interpretation. Their scores do not change the `internal_validation_only` release boundary. A high score on the older fidelity surrogate must never be presented as performance against change labels.

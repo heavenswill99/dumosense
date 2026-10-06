@@ -20,7 +20,7 @@ The worker accepts --data-dir, --validation-dir, and --output-dir. It never chan
 - Real model fitting, warnings, subgroup counts, uncertainty, and surrogate explanations are recorded. Failed secondary analyses remain visible.
 
 ## Application boundary
-The existing docs/api-data-contracts.md says backend endpoints have not been implemented. This repository supplies an offline worker and src/insight_adapter.py, not a deployed authenticated service. The backend must authenticate requests, enforce current consent, scope each user's history, validate source ownership, persist immutable run provenance, and deliver results.
+The current checkout includes a default-off Django endpoint at `backend/intelligence/` for internal validation. It has passed mocked API/ORM tests and an in-memory SQLite transaction smoke test, but it has not been connected to a live MySQL database or deployed. The ML worker and `src/insight_adapter.py` remain separate. The backend must authenticate requests, enforce current consent, scope each user's history, validate source ownership, persist immutable run provenance, and deliver results.
 
 The adapter checks the supplied authenticated user ID against the record and requires explicit consent verification. It returns a descriptive same-domain session summary with run provenance; it does not issue change alerts or medical claims. Its session_summary insight type is a proposed nonclinical extension to the contract's varchar insight_type field. Backend/UI integration must handle it before enabling this adapter in an application. Do not pass a caller-provided consent flag directly from an HTTP request.
 
