@@ -43,20 +43,31 @@ urlpatterns = [
     #Consent
     path("api/v1/consents/", ConsentListView.as_view(), name="user-consents"),
 
+    #Withdraw consent
     path(
     "api/v1/consents/<str:consent_id>/withdraw/",
     ConsentWithdrawView.as_view(),
     name="withdraw-consent",
     ),
 
+    #grant consent
     path(
     "api/v1/consents/<str:consent_id>/grant/",
     ConsentGrantView.as_view(),
     name="grant-consent"   
     ),
 
+    #assessment sessions
+    path(
+    "api/v1/assessments/",
+    include("assessments.urls"),
+    ),
 
-
+    #mindguard
+    path(
+    "api/v1/mindguard/",
+    include("mindguard.urls"),
+    ),
     
 
 
