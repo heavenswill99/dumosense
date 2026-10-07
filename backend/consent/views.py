@@ -4,19 +4,104 @@ from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .permissions import HasRequiredConsent
 
 from .models import Consent, ConsentHistory
-from .serializers import ConsentSerializer, ConsentWithdrawalSerializer, ConsentGrantSerializer
+from .serializers import ConsentSerializer, ConsentWithdrawalSerializer, ConsentGrantSerializer, ConsentCreateSerializer
 
 
-class ConsentListView(generics.ListAPIView):
-    serializer_class = ConsentSerializer
+class ConsentListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return ConsentCreateSerializer
+        return ConsentSerializer
 
     def get_queryset(self):
         return Consent.objects.filter(
             user=self.request.user
         ).order_by("granted_at")
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        consent_type = serializer.validated_data["consent_type"]
+        purpose = serializer.validated_data["purpose"]
+        consent_version = serializer.validated_data["consent_version"]
+        reason = serializer.validated_data.get("reason", "")
+
+        existing_consent = Consent.objects.filter(
+            user=request.user,
+            consent_type=consent_type,
+        ).first()
+
+        if existing_consent:
+            return Response(
+                {
+                    "detail": (
+                        "A consent record for this consent type already exists. "
+                        "Use the grant or withdraw endpoint to change its status."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        with transaction.atomic():
+            granted_at = timezone.now()
+
+            last_consent = Consent.objects.order_by(
+                "-consent_id"
+            ).first()
+
+            if last_consent is None:
+                consent_id = "CON00000001"
+            else:
+                next_number = int(
+                    last_consent.consent_id.replace("CON", "")
+                ) + 1
+                consent_id = f"CON{next_number:08d}"
+
+            consent = Consent.objects.create(
+                consent_id=consent_id,
+                user=request.user,
+                consent_type=consent_type,
+                purpose=purpose,
+                consent_version=consent_version,
+                status="granted",
+                granted_at=granted_at,
+                withdrawn_at=None,
+            )
+
+            last_history = ConsentHistory.objects.order_by(
+                "-consent_history_id"
+            ).first()
+
+            if last_history is None:
+                history_id = "CH00000001"
+            else:
+                next_history_number = int(
+                    last_history.consent_history_id.replace("CH", "")
+                ) + 1
+                history_id = f"CH{next_history_number:08d}"
+
+            ConsentHistory.objects.create(
+                consent_history_id=history_id,
+                consent=consent,
+                user=request.user,
+                previous_status=None,
+                new_status="granted",
+                changed_at=granted_at,
+                reason=reason or None,
+            )
+
+        return Response(
+            ConsentSerializer(consent).data,
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class ConsentWithdrawView(generics.GenericAPIView):
@@ -154,3 +239,4 @@ class ConsentGrantView(generics.GenericAPIView):
         ) + 1
 
         return f"CH{next_number:08d}"
+

@@ -21,7 +21,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from accounts.views import UserProfileView, ProductEnrollmentListView
-from consent.views import ConsentListView, ConsentWithdrawView, ConsentGrantView
+from consent.views import ConsentListView,  ConsentWithdrawView, ConsentGrantView
 
 
 urlpatterns = [
@@ -54,6 +54,10 @@ urlpatterns = [
     ConsentGrantView.as_view(),
     name="grant-consent"   
     ),
+
+
+
+    
 
 
 ]

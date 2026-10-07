@@ -30,3 +30,16 @@ class ConsentGrantSerializer(serializers.Serializer):
         allow_blank=True,
         max_length=255
     )
+
+class ConsentCreateSerializer(serializers.Serializer):
+    consent_type = serializers.CharField(max_length=100)
+    purpose = serializers.CharField(max_length=255)
+    consent_version = serializers.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+    )
+    reason = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        max_length=255,
+    )
