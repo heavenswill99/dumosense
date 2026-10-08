@@ -69,6 +69,7 @@ urlpatterns = [
     include("mindguard.urls"),
     ),
     
-
+    path("api/v1/health-reserve/", 
+    include("health_reserve.urls")),
 
 ]

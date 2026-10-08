@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from .models import CognitiveTask, CognitiveResult, WellbeingCheckin
+from .models import (CognitiveTask, 
+                     CognitiveResult, 
+                     WellbeingCheckin,
+                     ContextRecord)
 
 
 class CognitiveResponseCreateSerializer(serializers.Serializer):
@@ -263,4 +266,26 @@ class WellbeingCheckinSerializer(serializers.ModelSerializer):
             "perceived_cognitive_change",
             "completion_status",
         ]
+        read_only_fields = fields
+
+
+class ContextRecordSerializer(serializers.ModelSerializer):
+    related_session_id = serializers.CharField(
+        source="related_session.session_id",
+        read_only=True,
+        allow_null=True,
+    )
+
+    class Meta:
+        model = ContextRecord
+
+        fields = [
+            "context_id",
+            "related_session_id",
+            "recorded_at",
+            "context_type",
+            "context_value",
+            "source",
+        ]
+
         read_only_fields = fields

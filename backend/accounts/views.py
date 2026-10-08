@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -10,9 +11,11 @@ class UserProfileView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return UserProfile.objects.select_related("user").get(
-            user=self.request.user
+        return get_object_or_404(
+            UserProfile.objects.select_related("user"),
+            user=self.request.user,
         )
+
 
 class ProductEnrollmentListView(generics.ListAPIView):
     serializer_class = ProductEnrollmentSerializer

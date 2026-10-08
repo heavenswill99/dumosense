@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     HealthReserveAssessmentListView,
     HealthReserveAssessmentCreateView,
+    HealthReserveProgressView,
 )
 
 urlpatterns = [
@@ -15,5 +16,10 @@ urlpatterns = [
         "assessments/create/",
         HealthReserveAssessmentCreateView.as_view(),
         name="health-reserve-assessment-create",
+    ),
+    path(
+        "progress/",
+        HealthReserveProgressView.as_view(),
+        name="health-reserve-progress",
     ),
 ]

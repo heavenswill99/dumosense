@@ -7,6 +7,7 @@ from .views import (
     WellbeingCheckinCreateView,
     ContextRecordCreateView,
     WellbeingCheckinListView,
+    ContextRecordListView
 )
 
 
@@ -43,5 +44,13 @@ urlpatterns = [
     "wellbeing/history/",
     WellbeingCheckinListView.as_view(),
     name="wellbeing-checkin-list",
-),
+    ),
+
+    path(
+    "context/history/",
+    ContextRecordListView.as_view(),
+    name="context-history",
+    ),
+
+
 ]

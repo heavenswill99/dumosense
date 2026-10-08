@@ -17,7 +17,8 @@ from .serializers import (CognitiveResponseCreateSerializer,
                           CognitiveResultSerializer,
                           WellbeingCheckinCreateSerializer,
                           ContextRecordCreateSerializer,
-                          WellbeingCheckinSerializer)
+                          WellbeingCheckinSerializer,
+                          ContextRecordSerializer)
 
 
 class CognitiveResponseCreateView(generics.GenericAPIView):
@@ -353,3 +354,31 @@ class WellbeingCheckinListView(generics.ListAPIView):
             .filter(user=self.request.user)
             .order_by("-recorded_at")
         )
+
+class ContextRecordListView(generics.ListAPIView):
+    serializer_class = ContextRecordSerializer
+
+    permission_classes = [
+        IsAuthenticated,
+        HasRequiredConsent,
+    ]
+
+    required_consent_type = "cognitive_assessment"
+
+    def get_queryset(self):
+        queryset = (
+            ContextRecord.objects
+            .filter(user=self.request.user)
+            .order_by("-recorded_at")
+        )
+
+        session_id = self.request.query_params.get(
+            "session_id"
+        )
+
+        if session_id:
+            queryset = queryset.filter(
+                related_session__session_id=session_id
+            )
+
+        return queryset

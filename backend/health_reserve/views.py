@@ -73,3 +73,47 @@ class HealthReserveAssessmentCreateView(generics.GenericAPIView):
             HealthReserveAssessmentSerializer(assessment).data,
             status=status.HTTP_201_CREATED,
         )
+
+# GET: Track the logged-in user's Health Reserve progress
+class HealthReserveProgressView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        assessments = HealthReserveAssessment.objects.filter(
+            user=request.user
+        ).order_by("assessed_at", "reserve_assessment_id")
+
+        first = assessments.first()
+        latest = assessments.last()
+
+        if first is None:
+            return Response({
+                "message": "No Health Reserve assessments found.",
+                "assessment_count": 0,
+                "progress": None,
+            })
+
+        amount_change = (
+            latest.current_preparedness_amount
+            - first.current_preparedness_amount
+        )
+
+        target_change = (
+            latest.preparedness_target
+            - first.preparedness_target
+        )
+
+        return Response({
+            "assessment_count": assessments.count(),
+            "first_assessment_date": first.assessed_at,
+            "latest_assessment_date": latest.assessed_at,
+            "first_preparedness_amount": first.current_preparedness_amount,
+            "current_preparedness_amount": latest.current_preparedness_amount,
+            "amount_change": amount_change,
+            "first_target": first.preparedness_target,
+            "current_target": latest.preparedness_target,
+            "target_change": target_change,
+            "current_gap": latest.preparedness_gap,
+            "current_ratio": latest.preparedness_ratio,
+            "reserve_status": latest.reserve_status,
+        })
