@@ -1,13 +1,12 @@
+
 from types import SimpleNamespace
 from unittest.mock import patch
 
 from django.http import Http404
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from .views import UserProfileView
-from .views import ProductEnrollmentListView
-from django.test import TestCase
+from .views import UserProfileView, ProductEnrollmentListView
 
 
 class UserProfileSecurityTests(SimpleTestCase):
@@ -67,6 +66,17 @@ class UserProfileSecurityTests(SimpleTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, [])
 
+
+class UserDatabaseIntegrationTests(TestCase):
+
+    def test_user_table_is_available(self):
+        from .models import User
+
+        self.assertEqual(User.objects.count(), 0)
+
+
+class UserLoginTests(TestCase):
+
     def test_login_rejects_invalid_credentials(self):
         from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -82,10 +92,3 @@ class UserProfileSecurityTests(SimpleTestCase):
         response = TokenObtainPairView.as_view()(request)
 
         self.assertEqual(response.status_code, 401)
-
-class UserDatabaseIntegrationTests(TestCase):
-
-    def test_user_table_is_available(self):
-        from .models import User
-
-        self.assertEqual(User.objects.count(), 0)
