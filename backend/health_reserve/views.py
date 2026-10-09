@@ -14,6 +14,7 @@ from .serializers import (
     HealthReserveAssessmentCreateSerializer,
 )
 from .calculations import calculate_preparedness
+from .progress import calculate_progress
 
 
 # GET: Retrieve the logged-in user's assessment history
@@ -93,15 +94,12 @@ class HealthReserveProgressView(generics.GenericAPIView):
                 "progress": None,
             })
 
-        amount_change = (
-            latest.current_preparedness_amount
-            - first.current_preparedness_amount
-        )
-
-        target_change = (
-            latest.preparedness_target
-            - first.preparedness_target
-        )
+        progress = calculate_progress(
+            first_amount=first.current_preparedness_amount,
+            latest_amount=latest.current_preparedness_amount,
+            first_target=first.preparedness_target,
+            latest_target=latest.preparedness_target,
+    )
 
         return Response({
             "assessment_count": assessments.count(),
@@ -109,10 +107,10 @@ class HealthReserveProgressView(generics.GenericAPIView):
             "latest_assessment_date": latest.assessed_at,
             "first_preparedness_amount": first.current_preparedness_amount,
             "current_preparedness_amount": latest.current_preparedness_amount,
-            "amount_change": amount_change,
+            "amount_change": progress["amount_change"],
             "first_target": first.preparedness_target,
             "current_target": latest.preparedness_target,
-            "target_change": target_change,
+            "target_change": progress["target_change"],
             "current_gap": latest.preparedness_gap,
             "current_ratio": latest.preparedness_ratio,
             "reserve_status": latest.reserve_status,

@@ -7,6 +7,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 
 from .views import UserProfileView
 from .views import ProductEnrollmentListView
+from django.test import TestCase
 
 
 class UserProfileSecurityTests(SimpleTestCase):
@@ -81,3 +82,10 @@ class UserProfileSecurityTests(SimpleTestCase):
         response = TokenObtainPairView.as_view()(request)
 
         self.assertEqual(response.status_code, 401)
+
+class UserDatabaseIntegrationTests(TestCase):
+
+    def test_user_table_is_available(self):
+        from .models import User
+
+        self.assertEqual(User.objects.count(), 0)

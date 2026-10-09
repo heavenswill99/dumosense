@@ -170,3 +170,5 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+TEST_RUNNER = "config.test_runner.DumosenseTestRunner"
