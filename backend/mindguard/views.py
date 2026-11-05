@@ -20,6 +20,19 @@ from .serializers import (CognitiveResponseCreateSerializer,
                           WellbeingCheckinSerializer,
                           ContextRecordSerializer)
 
+from django.core.exceptions import (
+    PermissionDenied as DjangoPermissionDenied,
+    ValidationError as DjangoValidationError,
+)
+
+from rest_framework.views import APIView
+from rest_framework.exceptions import (
+    PermissionDenied as DRFPermissionDenied,
+    ValidationError as DRFValidationError,
+)
+
+from intelligence.orchestration import process_mindguard_assessment
+
 
 class CognitiveResponseCreateView(generics.GenericAPIView):
     serializer_class = CognitiveResponseCreateSerializer
@@ -382,3 +395,41 @@ class ContextRecordListView(generics.ListAPIView):
             )
 
         return queryset
+
+        if session_id:
+            queryset = queryset.filter(
+                related_session__session_id=session_id
+            )
+
+        return queryset
+
+
+class MindGuardInsightGenerateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, session_id):
+        try:
+            insight = process_mindguard_assessment(
+                user=request.user,
+                session_id=session_id,
+            )
+
+        except DjangoPermissionDenied:
+            raise DRFPermissionDenied(
+                "Assessment processing is not permitted."
+            )
+
+        except DjangoValidationError:
+            raise DRFValidationError(
+                "Assessment cannot be processed."
+            )
+
+        return Response(
+            {
+                "run_id": insight.run_id,
+                "insight_id": insight.insight_id,
+                "session_id": session_id,
+                "status": "completed",
+            },
+            status=status.HTTP_200_OK,
+        )

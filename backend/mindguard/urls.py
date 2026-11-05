@@ -1,5 +1,7 @@
 from django.urls import path
 
+
+
 from .views import (
     CognitiveResponseCreateView,
     CognitiveResultDetailView,
@@ -7,7 +9,8 @@ from .views import (
     WellbeingCheckinCreateView,
     ContextRecordCreateView,
     WellbeingCheckinListView,
-    ContextRecordListView
+    ContextRecordListView,
+    MindGuardInsightGenerateView,
 )
 
 
@@ -52,5 +55,15 @@ urlpatterns = [
     name="context-history",
     ),
 
+    path(
+    "sessions/<str:session_id>/insights/",
+    MindGuardInsightGenerateView.as_view(),
+    name="mindguard-insight-generate",
+    ),
 
+    path(
+    "sessions/<str:session_id>/insights/",
+    MindGuardInsightGenerateView.as_view(),
+    name="mindguard-insight-generate",
+    ),
 ]
