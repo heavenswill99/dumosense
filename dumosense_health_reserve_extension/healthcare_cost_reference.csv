@@ -1,0 +1,101 @@
+cost_reference_id,country_code,region_code,service_category,care_setting,estimated_cost_low,estimated_cost_typical,estimated_cost_high,currency_code,source_name,source_date,valid_from,valid_to,confidence_level,data_status
+HCR000001,NG,Akwa Ibom,emergency_consultation,mixed,12293.94,18913.75,31207.69,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000002,NG,Akwa Ibom,diagnostic_laboratory,private,14002.18,21541.82,35544.01,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000003,NG,Akwa Ibom,imaging,private,36433.25,56051.16,92484.41,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000004,NG,Akwa Ibom,pharmacy_medicines,private,18742.4,28834.46,47576.85,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000005,NG,Akwa Ibom,outpatient_procedure,private,41149.6,63307.08,104456.68,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000006,NG,Akwa Ibom,hospital_admission_per_day,public,63077.31,97042.02,160119.34,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000007,NG,Akwa Ibom,maternity_care,mixed,178171.26,274109.63,452280.88,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000008,NG,Akwa Ibom,dental_care,private,22727.6,34965.54,57693.14,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000009,NG,Akwa Ibom,ophthalmology,private,22759.12,35014.03,57773.15,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000010,NG,Akwa Ibom,specialist_consultation,public,24618.52,37874.65,62493.17,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000011,NG,Delta,emergency_consultation,public,12137.35,18672.84,30810.18,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000012,NG,Delta,diagnostic_laboratory,private,14509.72,22322.64,36832.36,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000013,NG,Delta,imaging,public,29652.46,45619.17,75271.63,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000014,NG,Delta,pharmacy_medicines,private,15112.41,23249.86,38362.27,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000015,NG,Delta,outpatient_procedure,private,42119.13,64798.66,106917.78,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000016,NG,Delta,hospital_admission_per_day,private,53563.0,82404.61,135967.61,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000017,NG,Delta,maternity_care,private,151553.67,233159.5,384713.17,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000018,NG,Delta,dental_care,public,23390.6,35985.54,59376.14,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000019,NG,Delta,ophthalmology,mixed,19394.52,29837.72,49232.25,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000020,NG,Delta,specialist_consultation,public,15728.48,24197.67,39926.15,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000021,NG,Edo,emergency_consultation,mixed,13428.21,20658.78,34086.99,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000022,NG,Edo,diagnostic_laboratory,public,14236.64,21902.52,36139.17,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000023,NG,Edo,imaging,public,26873.64,41344.06,68217.7,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000024,NG,Edo,pharmacy_medicines,public,18211.6,28017.85,46229.45,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000025,NG,Edo,outpatient_procedure,private,48421.85,74495.15,122917.0,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000026,NG,Edo,hospital_admission_per_day,mixed,67596.88,103995.2,171592.08,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000027,NG,Edo,maternity_care,public,156428.56,240659.32,397087.87,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000028,NG,Edo,dental_care,mixed,21928.71,33736.48,55665.2,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000029,NG,Edo,ophthalmology,private,17409.49,26783.83,44193.32,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000030,NG,Edo,specialist_consultation,private,21751.08,33463.2,55214.28,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000031,NG,Enugu,emergency_consultation,private,15598.45,23997.62,39596.07,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000032,NG,Enugu,diagnostic_laboratory,mixed,17346.61,26687.09,44033.7,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000033,NG,Enugu,imaging,private,40826.63,62810.2,103636.83,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000034,NG,Enugu,pharmacy_medicines,private,18974.9,29192.16,48167.07,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000035,NG,Enugu,outpatient_procedure,private,59606.2,91701.84,151308.04,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000036,NG,Enugu,hospital_admission_per_day,private,73864.48,113637.65,187502.13,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000037,NG,Enugu,maternity_care,mixed,258048.62,396997.87,655046.49,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000038,NG,Enugu,dental_care,private,31522.07,48495.5,80017.57,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000039,NG,Enugu,ophthalmology,private,25108.39,38628.29,63736.67,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000040,NG,Enugu,specialist_consultation,mixed,26421.91,40649.09,67070.99,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000041,NG,FCT,emergency_consultation,mixed,10102.9,15542.93,25645.83,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000042,NG,FCT,diagnostic_laboratory,private,12001.84,18464.37,30466.22,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000043,NG,FCT,imaging,private,25577.34,39349.76,64927.11,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000044,NG,FCT,pharmacy_medicines,private,13931.32,21432.79,35364.11,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000045,NG,FCT,outpatient_procedure,mixed,39401.76,60618.1,100019.86,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000046,NG,FCT,hospital_admission_per_day,private,55084.39,84745.22,139829.61,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000047,NG,FCT,maternity_care,private,142587.35,219365.15,361952.49,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000048,NG,FCT,dental_care,mixed,19107.42,29396.03,48503.44,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000049,NG,FCT,ophthalmology,private,16047.45,24688.39,40735.84,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000050,NG,FCT,specialist_consultation,private,19041.17,29294.1,48335.27,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000051,NG,Kaduna,emergency_consultation,private,13727.09,21118.6,34845.7,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000052,NG,Kaduna,diagnostic_laboratory,private,13686.82,21056.65,34743.47,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000053,NG,Kaduna,imaging,mixed,33669.94,51799.91,85469.85,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000054,NG,Kaduna,pharmacy_medicines,private,17091.96,26295.33,43387.29,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000055,NG,Kaduna,outpatient_procedure,private,48876.02,75193.88,124069.9,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000056,NG,Kaduna,hospital_admission_per_day,public,57575.81,88578.16,146153.97,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000057,NG,Kaduna,maternity_care,private,200857.29,309011.21,509868.49,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000058,NG,Kaduna,dental_care,private,25832.64,39742.53,65575.17,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000059,NG,Kaduna,ophthalmology,private,23180.37,35662.11,58842.48,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000060,NG,Kaduna,specialist_consultation,public,23501.69,36156.44,59658.13,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000061,NG,Lagos,emergency_consultation,private,11375.4,17500.61,28876.01,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000062,NG,Lagos,diagnostic_laboratory,public,12420.26,19108.09,31528.34,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000063,NG,Lagos,imaging,mixed,30106.43,46317.59,76424.02,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000064,NG,Lagos,pharmacy_medicines,private,14157.43,21780.66,35938.08,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000065,NG,Lagos,outpatient_procedure,mixed,41176.26,63348.09,104524.35,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000066,NG,Lagos,hospital_admission_per_day,public,67305.47,103546.87,170852.34,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000067,NG,Lagos,maternity_care,private,184023.13,283112.51,467135.64,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000068,NG,Lagos,dental_care,mixed,24002.92,36927.57,60930.49,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000069,NG,Lagos,ophthalmology,private,18742.31,28834.33,47576.64,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000070,NG,Lagos,specialist_consultation,public,19576.46,30117.63,49694.09,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000071,NG,Ogun,emergency_consultation,public,15144.49,23299.21,38443.69,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000072,NG,Ogun,diagnostic_laboratory,public,16921.67,26033.33,42955.0,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000073,NG,Ogun,imaging,private,37403.83,57544.36,94948.19,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000074,NG,Ogun,pharmacy_medicines,private,16559.21,25475.71,42034.92,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000075,NG,Ogun,outpatient_procedure,private,48177.19,74118.75,122295.94,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000076,NG,Ogun,hospital_admission_per_day,public,72700.29,111846.6,184546.89,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000077,NG,Ogun,maternity_care,mixed,178281.07,274278.56,452559.63,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000078,NG,Ogun,dental_care,private,24204.74,37238.06,61442.79,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000079,NG,Ogun,ophthalmology,public,24071.4,37032.93,61104.33,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000080,NG,Ogun,specialist_consultation,private,23554.23,36237.28,59791.51,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000081,NG,Oyo,emergency_consultation,private,12344.83,18992.05,31336.88,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000082,NG,Oyo,diagnostic_laboratory,public,17543.17,26989.49,44532.67,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000083,NG,Oyo,imaging,public,36508.78,56167.35,92676.13,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000084,NG,Oyo,pharmacy_medicines,public,16106.23,24778.82,40885.05,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000085,NG,Oyo,outpatient_procedure,private,47679.67,73353.34,121033.01,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000086,NG,Oyo,hospital_admission_per_day,private,65631.49,100971.53,166603.02,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000087,NG,Oyo,maternity_care,private,198451.57,305310.11,503761.68,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000088,NG,Oyo,dental_care,private,25454.34,39160.53,64614.87,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000089,NG,Oyo,ophthalmology,private,19816.91,30487.56,50304.48,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000090,NG,Oyo,specialist_consultation,private,20239.66,31137.93,51377.59,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000091,NG,Rivers,emergency_consultation,public,9899.31,15229.71,25129.02,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000092,NG,Rivers,diagnostic_laboratory,private,12716.9,19564.47,32281.37,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000093,NG,Rivers,imaging,public,21675.96,33347.63,55023.59,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000094,NG,Rivers,pharmacy_medicines,mixed,13553.42,20851.41,34404.83,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000095,NG,Rivers,outpatient_procedure,public,34772.7,53496.47,88269.17,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000096,NG,Rivers,hospital_admission_per_day,public,53386.76,82133.47,135520.23,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000097,NG,Rivers,maternity_care,mixed,159898.93,245998.36,405897.29,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000098,NG,Rivers,dental_care,private,21828.51,33582.32,55410.83,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000099,NG,Rivers,ophthalmology,private,17455.5,26854.62,44310.12,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED
+HCR000100,NG,Rivers,specialist_consultation,private,14046.86,21610.55,35657.41,NGN,synthetic_assumption_not_market_quote,2025-09-16,2025-09-16,,low,SIMULATED

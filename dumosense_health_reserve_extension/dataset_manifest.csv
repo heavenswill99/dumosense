@@ -1,0 +1,11 @@
+dataset,rows,unique_primary_key_values
+financial_profiles,4000,4000
+financial_transactions,111220,111220
+healthcare_cost_reference,100,100
+family_dependents,10119,10119
+health_reserve_goals,4000,4000
+health_reserve_activity,39782,39782
+health_reserve_scenarios,8000,8000
+healthcare_exposure_items,48707,48707
+health_reserve_ml_features,24376,24376
+health_reserve_ml_targets,20376,20376
