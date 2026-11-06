@@ -1,0 +1,4 @@
+
+/backend/.env.aiven
+/backend/.env.local.backup
+/backend/ca.pem
