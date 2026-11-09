@@ -62,4 +62,15 @@ class HealthReserveAssessment(models.Model):
     def __str__(self):
         return self.reserve_assessment_id
 
-# Create your models here.
+from .extended_models import (
+    FinancialProfiles,
+    FinancialTransactions,
+    HealthcareCostReference,
+    FamilyDependents,
+    HealthReserveGoals,
+    HealthReserveActivity,
+    HealthReserveScenarios,
+    HealthcareExposureItems,
+    HealthReserveContributionPlans,
+    HealthReserveAffordabilityOutcomes,
+)
