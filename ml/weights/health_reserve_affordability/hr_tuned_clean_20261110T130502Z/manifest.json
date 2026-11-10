@@ -1,0 +1,18 @@
+{
+  "run_id": "hr_tuned_clean_20261110T130502Z",
+  "release_status": "synthetic_engineering_validation_only",
+  "sha256": {
+    "engineered_plan_dataset.csv": "7d98d41edaf81f14810b4f3df103a6d138ea82415c2867b7242f8f91f33acbee",
+    "metrics.json": "4689504edc71f1f898a8428f9c0f2baa82ca01df6e23b4889f1eebc62b17350e",
+    "test_predictions.csv": "17c9d4f78dac9e98130ce215b82e9fe2d1b7b018414bd006c2fed0c67e911f9f",
+    "weights/catboost_classification.joblib": "2b543838fd61c7090687fb4d1acd84beb3576a86d7c392e71e12aad667a81952",
+    "weights/catboost_regression.joblib": "9b915a773568376cf0aa9d9a57a207899c493ba12ca29b560c46d1467d18658a",
+    "weights/isolation_forest.joblib": "b0a5f88992675c5f8b41c5835e24c889532942310c18479a27138e3643f0fca9",
+    "weights/lightgbm_classification.joblib": "84892e4849f66df9364d18d40b27f8c0035d0bb0c34a55a3cb6a82ae7544c777",
+    "weights/lightgbm_regression.joblib": "0f097a314edae8a1f128667a975c6d711ec3e842447672a1862ee342cc26918b",
+    "weights/linear_classification.joblib": "5768b346ae8b51836caf84c080efd576e8b58469b857ccb1a6abd576e99f5fd4",
+    "weights/linear_regression.joblib": "aa77668bc2cca97dd74f13e08ad00cbdcdff998b2952d78b8cefbdb8079c64ae",
+    "weights/random_forest_classification.joblib": "c94ee460b7206dbf9deb08864eb7f5b4a7364c19bad1d7559b20088d0d05c6cd",
+    "weights/random_forest_regression.joblib": "ec310d0ddda70aabc11972b8b738433c0db8f6e91820d3a8bf708337e8d39cc8"
+  }
+}

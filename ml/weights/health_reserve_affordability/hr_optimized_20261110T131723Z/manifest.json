@@ -1,0 +1,17 @@
+{
+  "run_id": "hr_optimized_20261110T131723Z",
+  "sha256": {
+    "metrics.json": "02c5ebbc21b5dfaae00a3a6d5003d7e80a33bc8fc9d07ccb889c331d0b76bc44",
+    "test_predictions.csv": "4ca4da17ae2b5797ff697cd3ca4354a1e9c140fc1f24ec74b2b785379d8e9570",
+    "weights/catboost_classification.joblib": "b9c39409ef4e06b7fb159538fa61c4193cf9d659ba2b215df94655480a2f0dc3",
+    "weights/catboost_regression.joblib": "e96debfcbaa5c788b5a50787d1eb96891296c18357f7d4c00e5af03c55b55bb2",
+    "weights/isolation_forest.joblib": "c40b7fca74e5d22b2f5e13b8da4b55060e2f35d01a39a679eb86e6f7fcc88a73",
+    "weights/lightgbm_classification.joblib": "9b500b67a3fa059b802647fab98ce3653fd14d112dc2ea35d40e62c90d5a27a3",
+    "weights/lightgbm_regression.joblib": "f49335d0bcc814110e10eff0f4bf969d61cfb69fccae802ee9a9411e388d41f7",
+    "weights/linear_classification.joblib": "f2007cfe26acdbd30edaa5b07cab310b6bae67c1756bda2681ff32e90dfa885f",
+    "weights/linear_regression.joblib": "2f1a748331cbf9410ab06861e4501e39a2fbad089f3ab913d5e8839cad6330cc",
+    "weights/median_baseline.joblib": "4b333b01387516c06782d8da6ccc2ba9290e2282580cff21fd17ae8618327978",
+    "weights/random_forest_classification.joblib": "6b1ae68cb163e4a011be6aca07bbc5864120cad100e07295f357d06e097d9761",
+    "weights/random_forest_regression.joblib": "ceda11233f7d7f1b2685985861d7b97d194aa83ab005e9aed848696d0b245b28"
+  }
+}

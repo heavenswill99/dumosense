@@ -1,0 +1,622 @@
+{
+  "run_id": "hr_tuned_clean_20261110T130502Z",
+  "release_status": "synthetic_engineering_validation_only",
+  "data_origin": "synthetic simulation; do not use for personal contribution advice or emergency-readiness decisions",
+  "task_scope": "four supervised model families, each with classification and regression artifacts, plus Isolation Forest anomaly comparator",
+  "classification_target": "sustainable iff all 3 later follow-ups are sustainable; adjusted_down if any of the 3 is adjusted down",
+  "regression_target": "mean of 3 later reported contributions / selected monthly contribution",
+  "point_in_time_policy": "latest assessment assessed_at <= plan choice; transaction/activity event and recorded times <= plan choice; active effective-dated profiles/dependents recorded by choice; goals/exposures created by choice; later scenarios excluded",
+  "counts": {
+    "plans": 4000,
+    "eligible": 3724,
+    "excluded_unknown_or_unselected": 276,
+    "labels": {
+      "sustainable": 2106,
+      "adjusted_down": 1618
+    },
+    "outcomes": 12000,
+    "transactions": 111220,
+    "activity_rows": 39782,
+    "dependents": 10119,
+    "goals": 4000,
+    "exposure_items": 48707,
+    "assessments": 24376
+  },
+  "split": {
+    "train": {
+      "plans": 2236,
+      "users": 2236,
+      "sustainable": 1269,
+      "adjusted_down": 967
+    },
+    "development": {
+      "plans": 748,
+      "users": 748,
+      "sustainable": 423,
+      "adjusted_down": 325
+    },
+    "test": {
+      "plans": 740,
+      "users": 740,
+      "sustainable": 414,
+      "adjusted_down": 326
+    }
+  },
+  "features": {
+    "numeric": [
+      "monthly_income",
+      "essential_monthly_expenses",
+      "debt_repayments",
+      "other_monthly_obligations",
+      "existing_liquid_savings",
+      "income_stability_index",
+      "net_monthly_cashflow",
+      "monthly_obligations",
+      "obligations_to_income_ratio",
+      "net_cashflow_to_income_ratio",
+      "liquid_savings_months",
+      "selected_contribution",
+      "contribution_to_income_ratio",
+      "contribution_to_positive_net_cashflow_ratio",
+      "contribution_to_estimated_surplus_ratio",
+      "surplus_after_selected_contribution",
+      "prior_assessment_count",
+      "latest_estimated_healthcare_exposure",
+      "latest_emergency_health_resources",
+      "latest_monthly_financial_obligations",
+      "latest_number_of_dependants",
+      "latest_current_preparedness_amount",
+      "latest_preparedness_target",
+      "latest_preparedness_gap",
+      "latest_preparedness_ratio",
+      "tx_income_total_30d",
+      "tx_income_mean_30d",
+      "tx_income_std_30d",
+      "tx_income_count_30d",
+      "tx_expense_total_30d",
+      "tx_expense_mean_30d",
+      "tx_expense_std_30d",
+      "tx_expense_count_30d",
+      "tx_net_amount_30d",
+      "tx_recurring_income_share_30d",
+      "tx_healthcare_specialist_consultation_amount_30d",
+      "tx_healthcare_diagnostic_laboratory_amount_30d",
+      "tx_healthcare_pharmacy_medicines_amount_30d",
+      "tx_healthcare_emergency_consultation_amount_30d",
+      "tx_income_total_90d",
+      "tx_income_mean_90d",
+      "tx_income_std_90d",
+      "tx_income_count_90d",
+      "tx_expense_total_90d",
+      "tx_expense_mean_90d",
+      "tx_expense_std_90d",
+      "tx_expense_count_90d",
+      "tx_net_amount_90d",
+      "tx_recurring_income_share_90d",
+      "tx_healthcare_specialist_consultation_amount_90d",
+      "tx_healthcare_diagnostic_laboratory_amount_90d",
+      "tx_healthcare_pharmacy_medicines_amount_90d",
+      "tx_healthcare_emergency_consultation_amount_90d",
+      "activity_allocation_total_30d",
+      "activity_withdrawal_total_30d",
+      "activity_count_30d",
+      "activity_amount_mean_30d",
+      "activity_net_30d",
+      "activity_allocation_total_90d",
+      "activity_withdrawal_total_90d",
+      "activity_count_90d",
+      "activity_amount_mean_90d",
+      "activity_net_90d",
+      "active_dependent_count",
+      "dependent_full_count",
+      "dependent_partial_count",
+      "dependent_full_share",
+      "dependent_age_0_5_count",
+      "dependent_age_6_12_count",
+      "dependent_age_13_17_count",
+      "dependent_age_18_29_count",
+      "dependent_age_30_59_count",
+      "dependent_age_60_plus_count",
+      "active_goal_count",
+      "active_goal_target_sum",
+      "goal_months_to_target_mean",
+      "prior_exposure_total",
+      "prior_exposure_count",
+      "prior_exposure_to_income_ratio",
+      "exposure_maternity_care_amount",
+      "exposure_emergency_care_amount",
+      "exposure_diagnostics_amount",
+      "exposure_medicines_amount",
+      "exposure_specialist_care_amount",
+      "exposure_hospital_care_amount",
+      "exposure_other_amount"
+    ],
+    "categorical": [
+      "income_type",
+      "employment_status",
+      "currency_code",
+      "country_code",
+      "region_code",
+      "plan_frequency",
+      "cashflow_coverage",
+      "latest_healthcare_coverage_status",
+      "latest_reserve_status"
+    ],
+    "removed_all_empty_numeric": [
+      "preparedness_ratio_change_since_first",
+      "healthcare_exposure_change_since_first"
+    ],
+    "excluded": [
+      "all identifiers as predictors",
+      "timestamps",
+      "system_suggested_monthly_contribution",
+      "rule_based_capacity_estimate",
+      "follow-up/status/strain/outcome fields",
+      "scenario table (created after plan choice)"
+    ]
+  },
+  "feature_count": 95,
+  "baselines": {
+    "majority_class_accuracy": 0.5594594594594594,
+    "majority_class": "sustainable",
+    "regression_persistence_selected_amount": {
+      "n": 740,
+      "mae_realization_ratio": 0.11418225478404825,
+      "rmse_realization_ratio": 0.16783487800251434,
+      "r2": -0.7841535585134058,
+      "within_10pp": 0.5905405405405405
+    },
+    "regression_train_median": {
+      "n": 740,
+      "mae_realization_ratio": 0.09601392446118111,
+      "rmse_realization_ratio": 0.13873747160550684,
+      "r2": -0.21914495857633876,
+      "within_10pp": 0.6851351351351351
+    }
+  },
+  "models": {
+    "linear": {
+      "classification": {
+        "selected_config": {
+          "C": 10
+        },
+        "development": {
+          "n": 748,
+          "accuracy": 0.6056149732620321,
+          "balanced_accuracy": 0.6106673940716494,
+          "macro_f1": 0.6049364149223964,
+          "precision_adjusted_down": 0.6797752808988764,
+          "recall_adjusted_down": 0.5721040189125296,
+          "roc_auc": 0.6189779959992726,
+          "average_precision_adjusted_down": 0.665441941340758,
+          "brier": 0.2396874082024989,
+          "log_loss": 0.6749849637670459,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              242,
+              181
+            ],
+            [
+              114,
+              211
+            ]
+          ]
+        },
+        "test": {
+          "n": 740,
+          "accuracy": 0.6,
+          "balanced_accuracy": 0.6059986366734833,
+          "macro_f1": 0.5998129147300418,
+          "precision_adjusted_down": 0.672514619883041,
+          "recall_adjusted_down": 0.5555555555555556,
+          "roc_auc": 0.6443496043389348,
+          "average_precision_adjusted_down": 0.6847014565840979,
+          "brier": 0.23283257600104773,
+          "log_loss": 0.6586066411607988,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              230,
+              184
+            ],
+            [
+              112,
+              214
+            ]
+          ]
+        },
+        "decision_threshold_from_development": 0.6000000000000001
+      },
+      "regression": {
+        "selected_config": {
+          "alpha": 10
+        },
+        "development": {
+          "n": 748,
+          "mae_realization_ratio": 0.10089684404862916,
+          "rmse_realization_ratio": 0.12652216142850736,
+          "r2": 0.005997294845161427,
+          "within_10pp": 0.5735294117647058
+        },
+        "test": {
+          "n": 740,
+          "mae_realization_ratio": 0.09825451430886699,
+          "rmse_realization_ratio": 0.1232154408645623,
+          "r2": 0.0383920024777481,
+          "within_10pp": 0.595945945945946
+        }
+      }
+    },
+    "random_forest": {
+      "classification": {
+        "selected_config": {
+          "n_estimators": 400,
+          "max_depth": null,
+          "min_samples_leaf": 20,
+          "max_features": 0.8
+        },
+        "development": {
+          "n": 748,
+          "accuracy": 0.6042780748663101,
+          "balanced_accuracy": 0.6112675031823969,
+          "macro_f1": 0.6039949633699634,
+          "precision_adjusted_down": 0.6840579710144927,
+          "recall_adjusted_down": 0.557919621749409,
+          "roc_auc": 0.6167666848517911,
+          "average_precision_adjusted_down": 0.6587302131992949,
+          "brier": 0.2371475191921719,
+          "log_loss": 0.6679044935141789,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              236,
+              187
+            ],
+            [
+              109,
+              216
+            ]
+          ]
+        },
+        "test": {
+          "n": 740,
+          "accuracy": 0.6094594594594595,
+          "balanced_accuracy": 0.613800717228298,
+          "macro_f1": 0.6089388539527603,
+          "precision_adjusted_down": 0.6770538243626062,
+          "recall_adjusted_down": 0.5772946859903382,
+          "roc_auc": 0.6608428914377167,
+          "average_precision_adjusted_down": 0.6969225652370515,
+          "brier": 0.2274488567619752,
+          "log_loss": 0.6465510429614202,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              239,
+              175
+            ],
+            [
+              114,
+              212
+            ]
+          ]
+        },
+        "decision_threshold_from_development": 0.5800000000000001
+      },
+      "regression": {
+        "selected_config": {
+          "n_estimators": 400,
+          "max_depth": 8,
+          "min_samples_leaf": 20,
+          "max_features": 0.8
+        },
+        "development": {
+          "n": 748,
+          "mae_realization_ratio": 0.10183384226383631,
+          "rmse_realization_ratio": 0.12568975979202499,
+          "r2": 0.01903355134458118,
+          "within_10pp": 0.5815508021390374
+        },
+        "test": {
+          "n": 740,
+          "mae_realization_ratio": 0.09805745623804137,
+          "rmse_realization_ratio": 0.12172290256202967,
+          "r2": 0.06154728356981476,
+          "within_10pp": 0.6094594594594595
+        }
+      }
+    },
+    "catboost": {
+      "classification": {
+        "selected_config": {
+          "iterations": 200,
+          "depth": 3,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 5
+        },
+        "development": {
+          "n": 748,
+          "accuracy": 0.6163101604278075,
+          "balanced_accuracy": 0.6108565193671577,
+          "macro_f1": 0.6105460040673194,
+          "precision_adjusted_down": 0.6634615384615384,
+          "recall_adjusted_down": 0.6524822695035462,
+          "roc_auc": 0.6324495362793234,
+          "average_precision_adjusted_down": 0.6772574654088956,
+          "brier": 0.23358258473889437,
+          "log_loss": 0.6593632396318163,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              276,
+              147
+            ],
+            [
+              140,
+              185
+            ]
+          ]
+        },
+        "test": {
+          "n": 740,
+          "accuracy": 0.6256756756756757,
+          "balanced_accuracy": 0.6207951750096322,
+          "macro_f1": 0.6206708304418228,
+          "precision_adjusted_down": 0.6666666666666666,
+          "recall_adjusted_down": 0.6618357487922706,
+          "roc_auc": 0.6646364956581015,
+          "average_precision_adjusted_down": 0.6955556199922079,
+          "brier": 0.22849698874591878,
+          "log_loss": 0.6488090077800848,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              274,
+              140
+            ],
+            [
+              137,
+              189
+            ]
+          ]
+        },
+        "decision_threshold_from_development": 0.56
+      },
+      "regression": {
+        "selected_config": {
+          "iterations": 300,
+          "depth": 4,
+          "learning_rate": 0.03,
+          "l2_leaf_reg": 5
+        },
+        "development": {
+          "n": 748,
+          "mae_realization_ratio": 0.10165201606049701,
+          "rmse_realization_ratio": 0.12509946246458814,
+          "r2": 0.02822605998686556,
+          "within_10pp": 0.589572192513369
+        },
+        "test": {
+          "n": 740,
+          "mae_realization_ratio": 0.09781827928057565,
+          "rmse_realization_ratio": 0.12144133720416636,
+          "r2": 0.0658838571922643,
+          "within_10pp": 0.595945945945946
+        }
+      }
+    },
+    "lightgbm": {
+      "classification": {
+        "selected_config": {
+          "n_estimators": 150,
+          "num_leaves": 7,
+          "min_child_samples": 30,
+          "learning_rate": 0.03,
+          "reg_lambda": 5
+        },
+        "development": {
+          "n": 748,
+          "accuracy": 0.6082887700534759,
+          "balanced_accuracy": 0.6198036006546646,
+          "macro_f1": 0.6082712666605896,
+          "precision_adjusted_down": 0.703125,
+          "recall_adjusted_down": 0.5319148936170213,
+          "roc_auc": 0.634573558828878,
+          "average_precision_adjusted_down": 0.6678633376570264,
+          "brier": 0.23360756875915614,
+          "log_loss": 0.6599966576488071,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              225,
+              198
+            ],
+            [
+              95,
+              230
+            ]
+          ]
+        },
+        "test": {
+          "n": 740,
+          "accuracy": 0.6081081081081081,
+          "balanced_accuracy": 0.6194392578761744,
+          "macro_f1": 0.6079248151071355,
+          "precision_adjusted_down": 0.7,
+          "recall_adjusted_down": 0.5241545893719807,
+          "roc_auc": 0.6590942769923831,
+          "average_precision_adjusted_down": 0.69308757546842,
+          "brier": 0.22839579167816854,
+          "log_loss": 0.6485108165971,
+          "confusion_matrix_sustainable_adjusted_down": [
+            [
+              217,
+              197
+            ],
+            [
+              93,
+              233
+            ]
+          ]
+        },
+        "decision_threshold_from_development": 0.6000000000000001
+      },
+      "regression": {
+        "selected_config": {
+          "n_estimators": 150,
+          "num_leaves": 7,
+          "min_child_samples": 30,
+          "learning_rate": 0.03,
+          "reg_lambda": 5
+        },
+        "development": {
+          "n": 748,
+          "mae_realization_ratio": 0.10177857196531125,
+          "rmse_realization_ratio": 0.12545295798386033,
+          "r2": 0.022726386870850046,
+          "within_10pp": 0.5828877005347594
+        },
+        "test": {
+          "n": 740,
+          "mae_realization_ratio": 0.09790603641592219,
+          "rmse_realization_ratio": 0.12147641760643449,
+          "r2": 0.06534410847446681,
+          "within_10pp": 0.6
+        }
+      }
+    }
+  },
+  "decision_thresholds_development": {
+    "linear": 0.6000000000000001,
+    "random_forest": 0.5800000000000001,
+    "catboost": 0.56,
+    "lightgbm": 0.6000000000000001
+  },
+  "hyperparameter_search": "four configurations per supervised family and task; class thresholds selected on development data by balanced accuracy then macro-F1",
+  "isolation_forest": {
+    "threshold_dev_p90": 0.5054683160927476,
+    "test_flag_count": 85,
+    "test_flag_rate": 0.11486486486486487,
+    "labelled_accuracy": null,
+    "meaning": "unlabeled anomaly score only; not affordability"
+  },
+  "limits": [
+    "all labels and input histories are synthetic",
+    "only one plan per synthetic user and only three simulated follow-ups",
+    "no observed personal affordability or causal evidence",
+    "no clinical/emergency readiness target",
+    "not production validated"
+  ],
+  "versions": {
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "scikit_learn": "1.9.0"
+  },
+  "source_sha256": {
+    "health_reserve_assessments.csv": "3e6ee2de880072f368535ee95b6285339a50b0618464a7dd418d5f90f225c1a6",
+    "financial_profiles.csv": "cf4ae5318c214d881e84aa4a8ea2f68a61542c0d085f4a1cbd64aa82bcdb9ab4",
+    "financial_transactions.csv": "050b8e7e34eb8e76c7b7356e9b18af8cc79d542220deae4bff90cd08de03c00b",
+    "family_dependents.csv": "cafada3ad64ecf266598d09f82489c2355b13391195a2d91930e1a07923ec3f2",
+    "health_reserve_goals.csv": "5e589b570a2d3fb547fdb5ed92d37195adfaf74a0f3d8ec77b0656394b3f3493",
+    "health_reserve_activity.csv": "f5fb6318aa978223553fb29f6821fa47533203b0924960fe83d18debd3ca20d4",
+    "healthcare_exposure_items.csv": "444f2aec3663675414f4f53501ab731c483962e8f3c962d0a99d3b7a258e087e",
+    "health_reserve_contribution_plans.csv": "e676c9dafe4edfb1dd4ac566010d027642631363afc63a13928c937486958164",
+    "health_reserve_affordability_outcomes.csv": "ba2079aaed433a4d3d2b3035a259654cd453af08bc40d5457b18894331ceddbc"
+  },
+  "training_script_sha256": "985b38ac91c39a46d2ad09ad843f6db6d6d0c41e2624762b8ce4dbac31797519",
+  "seed": 42,
+  "split_rule": "SHA-256 user hash; deterministic user-disjoint 60/20/20",
+  "threshold": "classifier thresholds selected using development data only; anomaly cutoff development p90",
+  "feature_names": [
+    "monthly_income",
+    "essential_monthly_expenses",
+    "debt_repayments",
+    "other_monthly_obligations",
+    "existing_liquid_savings",
+    "income_stability_index",
+    "net_monthly_cashflow",
+    "monthly_obligations",
+    "obligations_to_income_ratio",
+    "net_cashflow_to_income_ratio",
+    "liquid_savings_months",
+    "selected_contribution",
+    "contribution_to_income_ratio",
+    "contribution_to_positive_net_cashflow_ratio",
+    "contribution_to_estimated_surplus_ratio",
+    "surplus_after_selected_contribution",
+    "prior_assessment_count",
+    "latest_estimated_healthcare_exposure",
+    "latest_emergency_health_resources",
+    "latest_monthly_financial_obligations",
+    "latest_number_of_dependants",
+    "latest_current_preparedness_amount",
+    "latest_preparedness_target",
+    "latest_preparedness_gap",
+    "latest_preparedness_ratio",
+    "tx_income_total_30d",
+    "tx_income_mean_30d",
+    "tx_income_std_30d",
+    "tx_income_count_30d",
+    "tx_expense_total_30d",
+    "tx_expense_mean_30d",
+    "tx_expense_std_30d",
+    "tx_expense_count_30d",
+    "tx_net_amount_30d",
+    "tx_recurring_income_share_30d",
+    "tx_healthcare_specialist_consultation_amount_30d",
+    "tx_healthcare_diagnostic_laboratory_amount_30d",
+    "tx_healthcare_pharmacy_medicines_amount_30d",
+    "tx_healthcare_emergency_consultation_amount_30d",
+    "tx_income_total_90d",
+    "tx_income_mean_90d",
+    "tx_income_std_90d",
+    "tx_income_count_90d",
+    "tx_expense_total_90d",
+    "tx_expense_mean_90d",
+    "tx_expense_std_90d",
+    "tx_expense_count_90d",
+    "tx_net_amount_90d",
+    "tx_recurring_income_share_90d",
+    "tx_healthcare_specialist_consultation_amount_90d",
+    "tx_healthcare_diagnostic_laboratory_amount_90d",
+    "tx_healthcare_pharmacy_medicines_amount_90d",
+    "tx_healthcare_emergency_consultation_amount_90d",
+    "activity_allocation_total_30d",
+    "activity_withdrawal_total_30d",
+    "activity_count_30d",
+    "activity_amount_mean_30d",
+    "activity_net_30d",
+    "activity_allocation_total_90d",
+    "activity_withdrawal_total_90d",
+    "activity_count_90d",
+    "activity_amount_mean_90d",
+    "activity_net_90d",
+    "active_dependent_count",
+    "dependent_full_count",
+    "dependent_partial_count",
+    "dependent_full_share",
+    "dependent_age_0_5_count",
+    "dependent_age_6_12_count",
+    "dependent_age_13_17_count",
+    "dependent_age_18_29_count",
+    "dependent_age_30_59_count",
+    "dependent_age_60_plus_count",
+    "active_goal_count",
+    "active_goal_target_sum",
+    "goal_months_to_target_mean",
+    "prior_exposure_total",
+    "prior_exposure_count",
+    "prior_exposure_to_income_ratio",
+    "exposure_maternity_care_amount",
+    "exposure_emergency_care_amount",
+    "exposure_diagnostics_amount",
+    "exposure_medicines_amount",
+    "exposure_specialist_care_amount",
+    "exposure_hospital_care_amount",
+    "exposure_other_amount",
+    "income_type",
+    "employment_status",
+    "currency_code",
+    "country_code",
+    "region_code",
+    "plan_frequency",
+    "cashflow_coverage",
+    "latest_healthcare_coverage_status",
+    "latest_reserve_status"
+  ]
+}
