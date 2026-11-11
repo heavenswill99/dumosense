@@ -5,7 +5,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.throttling import ScopedRateThrottle
+#from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from .models import WaitlistRegistration
@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 class WaitlistRegistrationView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
-    throttle_classes = [ScopedRateThrottle]
-    throttle_scope = "waitlist"
+    throttle_classes = []
+    
 
     def post(self, request, *args, **kwargs):
         serializer = WaitlistRegistrationSerializer(data=request.data)
