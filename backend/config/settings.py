@@ -226,10 +226,8 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-EMAIL_BACKEND = os.getenv(
-    "DJANGO_EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = "waitlist.email_backend.ResendEmailBackend"
+
 
 TEST_RUNNER = "config.test_runner.DumosenseTestRunner"
 
@@ -268,9 +266,9 @@ REST_FRAMEWORK = {
 }
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
-WAITLIST_FROM_EMAIL = os.getenv(
-    "WAITLIST_FROM_EMAIL",
-    "hello@dumosense.com",
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "hello@dumosense.com"
 )
 WAITLIST_FROM_NAME = os.getenv("WAITLIST_FROM_NAME", "DumoSense")
 WAITLIST_WEBSITE_URL = os.getenv(
