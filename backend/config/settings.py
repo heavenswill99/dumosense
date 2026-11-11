@@ -255,9 +255,16 @@ CSRF_TRUSTED_ORIGINS =  [
     "https://api.dumosense.com",
 ]
 
-REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
-    **REST_FRAMEWORK.get("DEFAULT_THROTTLE_RATES", {}),
-    "waitlist": os.getenv("WAITLIST_ANON_RATE", "5/hour"),
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "accounts.authentication.CookieJWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
+    "DEFAULT_THROTTLE_RATES": {
+        "waitlist": "10/hour",
+    },
 }
 
 RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
