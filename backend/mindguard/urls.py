@@ -12,6 +12,7 @@ from .views import (
     ContextRecordListView,
     MindGuardInsightGenerateView,
 )
+from intelligence.views import MindGuardInsightListView
 
 
 urlpatterns = [
@@ -62,8 +63,8 @@ urlpatterns = [
     ),
 
     path(
-    "sessions/<str:session_id>/insights/",
-    MindGuardInsightGenerateView.as_view(),
-    name="mindguard-insight-generate",
-    ),
+    "insights/",
+    MindGuardInsightListView.as_view(),
+    name="mindguard-insight-list",
+   ), 
 ]

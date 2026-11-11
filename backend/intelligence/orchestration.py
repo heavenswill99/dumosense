@@ -21,6 +21,10 @@ def process_mindguard_assessment(*, user, session_id):
         session_id=session_id,
     )
 
+    if insight_data.get("status") == "inference_pending":
+        return insight_data
+
+    
     # Step 2: Validate the response before persistence.
     if not isinstance(insight_data, dict):
         raise ValidationError("Invalid MindGuard insight response.")

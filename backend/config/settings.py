@@ -30,11 +30,15 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
 
-ALLOWED_HOSTS = [
-     host.strip()
-    for host in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
-    if host.strip()
 
+
+
+
+ALLOWED_HOSTS = [
+    "dumosense-backend.onrender.com",
+    "api.dumosense.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 
@@ -62,6 +66,7 @@ INSTALLED_APPS = [
     "events",
     "intelligence",
     "governance",
+    "waitlist",
 ]
 
 MIDDLEWARE = [
@@ -181,19 +186,50 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-if not DEBUG:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
+# Production security configuration
+
+SECURE_SSL_REDIRECT = (
+    os.getenv("DJANGO_SECURE_SSL_REDIRECT", "False").lower() == "true"
+)
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Production security configuration
+
+
+# Production security configuration
+
+SECURE_SSL_REDIRECT = (
+    os.getenv("DJANGO_SECURE_SSL_REDIRECT", "False").lower() == "true"
+)
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_HSTS_SECONDS = int(
+    os.getenv("DJANGO_HSTS_SECONDS", "0")
+)
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
+
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'EMAIL_BACKEND': "django.core.mail.backends.console.EmailBackend"
-    },
-}
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+)
 
 TEST_RUNNER = "config.test_runner.DumosenseTestRunner"
 
@@ -206,14 +242,36 @@ def env_list(name, default=""):
     ]
 
 
-CORS_ALLOWED_ORIGINS = env_list(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:5173,http://127.0.0.1:5173"
-)
+CORS_ALLOWED_ORIGINS = [
+    "https://dumosense.com",
+    "https://www.dumosense.com",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = env_list(
-    "CSRF_TRUSTED_ORIGINS",
-    "http://localhost:5173,http://127.0.0.1:5173"
+CSRF_TRUSTED_ORIGINS =  [
+    "https://dumosense.com",
+    "https://www.dumosense.com",
+    "https://api.dumosense.com",
+]
+
+REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
+    **REST_FRAMEWORK.get("DEFAULT_THROTTLE_RATES", {}),
+    "waitlist": os.getenv("WAITLIST_ANON_RATE", "5/hour"),
+}
+
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+WAITLIST_FROM_EMAIL = os.getenv(
+    "WAITLIST_FROM_EMAIL",
+    "hello@dumosense.com",
+)
+WAITLIST_FROM_NAME = os.getenv("WAITLIST_FROM_NAME", "DumoSense")
+WAITLIST_WEBSITE_URL = os.getenv(
+    "WAITLIST_WEBSITE_URL",
+    "https://dumosense.com",
+)
+
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
 )

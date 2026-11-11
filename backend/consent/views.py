@@ -10,7 +10,10 @@ from .permissions import HasRequiredConsent
 
 from .models import Consent, ConsentHistory
 from .serializers import ConsentSerializer, ConsentWithdrawalSerializer, ConsentGrantSerializer, ConsentCreateSerializer
+from django.db import transaction, IntegrityError
 
+
+import uuid
 
 class ConsentListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -49,58 +52,48 @@ class ConsentListView(generics.ListCreateAPIView):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        try:
 
-        with transaction.atomic():
-            granted_at = timezone.now()
+            with transaction.atomic():
+                granted_at = timezone.now()
 
-            last_consent = Consent.objects.order_by(
-                "-consent_id"
-            ).first()
+                consent_id = f"CON{uuid.uuid4().hex[:16].upper()}"
 
-            if last_consent is None:
-                consent_id = "CON00000001"
-            else:
-                next_number = int(
-                    last_consent.consent_id.replace("CON", "")
-                ) + 1
-                consent_id = f"CON{next_number:08d}"
+                consent = Consent.objects.create(
+                    consent_id=consent_id,
+                    user=request.user,
+                    consent_type=consent_type,
+                    purpose=purpose,
+                    consent_version=consent_version,
+                    status="granted",
+                    granted_at=granted_at,
+                    withdrawn_at=None,
+                )
 
-            consent = Consent.objects.create(
-                consent_id=consent_id,
-                user=request.user,
-                consent_type=consent_type,
-                purpose=purpose,
-                consent_version=consent_version,
-                status="granted",
-                granted_at=granted_at,
-                withdrawn_at=None,
+                history_id = f"CH{uuid.uuid4().hex[:16].upper()}"
+
+                ConsentHistory.objects.create(
+                    consent_history_id=history_id,
+                    consent=consent,
+                    user=request.user,
+                    previous_status=None,
+                    new_status="granted",
+                    changed_at=granted_at,
+                    reason=reason or None,
+                )
+
+            return Response(
+                ConsentSerializer(consent).data,
+                status=status.HTTP_201_CREATED,
             )
-
-            last_history = ConsentHistory.objects.order_by(
-                "-consent_history_id"
-            ).first()
-
-            if last_history is None:
-                history_id = "CH00000001"
-            else:
-                next_history_number = int(
-                    last_history.consent_history_id.replace("CH", "")
-                ) + 1
-                history_id = f"CH{next_history_number:08d}"
-
-            ConsentHistory.objects.create(
-                consent_history_id=history_id,
-                consent=consent,
-                user=request.user,
-                previous_status=None,
-                new_status="granted",
-                changed_at=granted_at,
-                reason=reason or None,
+        except IntegrityError:
+            return Response(
+        {
+            "detail": (
+                "A consent record for this consent type already exists."
             )
-
-        return Response(
-            ConsentSerializer(consent).data,
-            status=status.HTTP_201_CREATED,
+        },
+        status=status.HTTP_409_CONFLICT,
         )
 
 
@@ -112,63 +105,69 @@ class ConsentWithdrawView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            consent = Consent.objects.get(
-                consent_id=consent_id,
-                user=request.user,
-            )
-        except Consent.DoesNotExist:
-            return Response(
-                {"detail": "Consent record not found."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if consent.status == "withdrawn":
-            return Response(
-                {"detail": "Consent has already been withdrawn."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         reason = serializer.validated_data.get("reason", "")
 
         with transaction.atomic():
-            previous_status = consent.status
 
-            consent.status = "withdrawn"
-            consent.withdrawn_at = timezone.now()
-            consent.save(
-                update_fields=["status", "withdrawn_at"]
+            # Lock the consent record to prevent concurrent updates.
+            consent = (
+                Consent.objects
+                .select_for_update()
+                .filter(
+                    consent_id=consent_id,
+                    user=request.user,
+                )
+                .first()
             )
 
+            if consent is None:
+                return Response(
+                    {"detail": "Consent record not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if consent.status == "withdrawn":
+                return Response(
+                    {"detail": "Consent has already been withdrawn."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Preserve the previous status for audit history.
+            previous_status = consent.status
+            changed_at = timezone.now()
+
+            # Update the consent record.
+            consent.status = "withdrawn"
+            consent.withdrawn_at = changed_at
+
+            consent.save(
+                update_fields=[
+                    "status",
+                    "withdrawn_at",
+                ]
+            )
+
+            # Record the withdrawal in consent history.
             ConsentHistory.objects.create(
                 consent_history_id=self._next_history_id(),
                 consent=consent,
                 user=request.user,
                 previous_status=previous_status,
                 new_status="withdrawn",
-                changed_at=consent.withdrawn_at,
+                changed_at=changed_at,
                 reason=reason or None,
             )
 
+        # Return the updated consent.
         return Response(
             ConsentSerializer(consent).data,
             status=status.HTTP_200_OK,
         )
 
     def _next_history_id(self):
-        last_history = ConsentHistory.objects.order_by(
-            "-consent_history_id"
-        ).first()
+        return f"CH{uuid.uuid4().hex[:16].upper()}"
 
-        if last_history is None:
-            return "CH00000001"
-
-        next_number = int(
-            last_history.consent_history_id.replace("CH", "")
-        ) + 1
-
-        return f"CH{next_number:08d}"
-
+    
 class ConsentGrantView(generics.GenericAPIView):
     serializer_class = ConsentGrantSerializer
     permission_classes = [IsAuthenticated]
@@ -177,32 +176,42 @@ class ConsentGrantView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        try:
-            consent = Consent.objects.get(
-                consent_id=consent_id,
-                user=request.user,
-            )
-        except Consent.DoesNotExist:
-            return Response(
-                {"detail": "Consent record not found."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        if consent.status == "granted":
-            return Response(
-                {"detail": "Consent is already granted."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         reason = serializer.validated_data.get("reason", "")
 
         with transaction.atomic():
+
+            # Lock the consent record during the update.
+            consent = (
+                Consent.objects
+                .select_for_update()
+                .filter(
+                    consent_id=consent_id,
+                    user=request.user,
+                )
+                .first()
+            )
+
+            if consent is None:
+                return Response(
+                    {"detail": "Consent record not found."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            if consent.status == "granted":
+                return Response(
+                    {"detail": "Consent is already granted."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Preserve the previous status for audit history.
             previous_status = consent.status
             changed_at = timezone.now()
 
+            # Grant consent again.
             consent.status = "granted"
             consent.granted_at = changed_at
             consent.withdrawn_at = None
+
             consent.save(
                 update_fields=[
                     "status",
@@ -211,6 +220,7 @@ class ConsentGrantView(generics.GenericAPIView):
                 ]
             )
 
+            # Record the change in consent history.
             ConsentHistory.objects.create(
                 consent_history_id=self._next_history_id(),
                 consent=consent,
@@ -227,16 +237,4 @@ class ConsentGrantView(generics.GenericAPIView):
         )
 
     def _next_history_id(self):
-        last_history = ConsentHistory.objects.order_by(
-            "-consent_history_id"
-        ).first()
-
-        if last_history is None:
-            return "CH00000001"
-
-        next_number = int(
-            last_history.consent_history_id.replace("CH", "")
-        ) + 1
-
-        return f"CH{next_number:08d}"
-
+        return f"CH{uuid.uuid4().hex[:16].upper()}"

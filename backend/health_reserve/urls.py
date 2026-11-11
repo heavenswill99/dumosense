@@ -1,5 +1,5 @@
 from django.urls import path
-from .extended_views import FinancialProfileListView
+from .extended_views import FinancialProfileListView, FamilyDependentsListView
 
 from .views import (
     HealthReserveAssessmentListView,
@@ -28,5 +28,11 @@ urlpatterns = [
     "financial-profile/",
     FinancialProfileListView.as_view(),
     name="health-reserve-financial-profile",
+    ),
+
+    path(
+    "family-dependents/",
+    FamilyDependentsListView.as_view(),
+    name="health-reserve-family-dependents",
     ),
 ]

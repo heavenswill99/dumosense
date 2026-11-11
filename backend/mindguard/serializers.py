@@ -52,6 +52,7 @@ class CognitiveResponseCreateSerializer(serializers.Serializer):
 
 
 class CognitiveResultSerializer(serializers.ModelSerializer):
+    """Public result metadata only. Raw metrics remain on CognitiveResult for ML."""
     assessment_type_id = serializers.CharField(
         source="assessment_type.assessment_type_id",
         read_only=True,
@@ -92,18 +93,6 @@ class CognitiveResultSerializer(serializers.ModelSerializer):
             "cognitive_domain",
             "started_at",
             "completed_at",
-            "total_trials",
-            "correct_responses",
-            "incorrect_responses",
-            "omissions",
-            "accuracy_rate",
-            "mean_reaction_time_ms",
-            "median_reaction_time_ms",
-            "reaction_time_variability_ms",
-            "completion_time_seconds",
-            "difficulty_level",
-            "baseline_difference",
-            "previous_session_difference",
             "calculated_at",
         ]
         read_only_fields = fields

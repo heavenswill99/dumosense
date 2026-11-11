@@ -23,6 +23,8 @@ from django.urls import include, path
 from accounts.views import UserProfileView, ProductEnrollmentListView
 from consent.views import ConsentListView,  ConsentWithdrawView, ConsentGrantView
 
+from waitlist.views import WaitlistRegistrationView
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -71,5 +73,17 @@ urlpatterns = [
     
     path("api/v1/health-reserve/", 
     include("health_reserve.urls")),
+
+
+     path(
+        "api/v1/waitlist/",
+        WaitlistRegistrationView.as_view(),
+        name="waitlist-register",
+        ),
+        path(
+        "api/waitlist/",
+        WaitlistRegistrationView.as_view(),
+        name="waitlist-register-legacy",
+            ),
 
 ]
