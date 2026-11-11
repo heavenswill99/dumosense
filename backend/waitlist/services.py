@@ -1,8 +1,10 @@
+
 import logging
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.db.models import F
+from django.template.loader import render_to_string
 from django.utils import timezone
 
 from .models import WaitlistRegistration
@@ -27,20 +29,41 @@ def send_waitlist_confirmation(registration_id):
     )
 
     try:
-        result = send_mail(
-            subject="Welcome to the DumoSense Waitlist!",
-            message=(
-                f"Hello {registration.full_name},\n\n"
-                "Thank you for joining the DumoSense early access waitlist!\n\n"
-                "We're excited to have you with us. "
-                "You'll receive updates as we prepare for launch.\n\n"
-                "Best regards,\n"
-                "The DumoSense Team"
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[registration.email],
-            fail_silently=False,
+        html_content = render_to_string(
+            "waitlist/welcome_email.html",
+            {
+                "full_name": registration.full_name,
+            },
         )
+
+        plain_text = (
+            f"Hello {registration.full_name},\n\n"
+            "Thank you for joining the DumoSense early access waitlist!\n\n"
+            "We're excited to have you with us. "
+            "You'll receive updates as we prepare for launch.\n\n"
+            "We'd also love to have you in our community! "
+            "Join our Telegram group to stay connected "
+            "and be part of the DumoSense journey.\n\n"
+            "Join our Telegram community:\n"
+            "https://t.me/+IDfUBKdB3utmMGY0\n\n"
+            "Best regards,\n"
+            "The DumoSense Team\n\n"
+            "This is an automated email. Please do not reply."
+        )
+
+        email = EmailMultiAlternatives(
+            subject="Welcome to the DumoSense Waitlist",
+            body=plain_text,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[registration.email],
+        )
+
+        email.attach_alternative(
+            html_content,
+            "text/html",
+        )
+
+        result = email.send(fail_silently=False)
 
         if result != 1:
             raise RuntimeError(
