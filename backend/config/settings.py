@@ -265,11 +265,19 @@ REST_FRAMEWORK = {
     },
 }
 
-RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "").strip()
+
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
-    "hello@dumosense.com"
-)
+    "hello@dumosense.com",
+).strip()
+
+WAITLIST_FROM_NAME = "DumoSense"
+WAITLIST_FROM_EMAIL = DEFAULT_FROM_EMAIL
+
+EMAIL_BACKEND = "waitlist.email_backend.ResendEmailBackend"
+
+
 WAITLIST_FROM_NAME = os.getenv("WAITLIST_FROM_NAME", "DumoSense")
 WAITLIST_WEBSITE_URL = os.getenv(
     "WAITLIST_WEBSITE_URL",

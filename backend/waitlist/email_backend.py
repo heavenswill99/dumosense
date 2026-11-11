@@ -10,12 +10,12 @@ class ResendEmailBackend(BaseEmailBackend):
             raise RuntimeError("RESEND_API_KEY is not configured.")
 
         from_name = getattr(settings, "WAITLIST_FROM_NAME", "DumoSense")
-        from_email = getattr(settings, "WAITLIST_FROM_EMAIL", "noreply@dumosense.com")
+        from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "hello@dumosense.com")
 
         sent_count = 0
         for message in email_messages:
             payload = {
-                "from": message.from_email or f"{from_name} <{from_email}>",
+                "from": f"{from_name} <{from_email}>",
                 "to": list(message.to),
                 "subject": message.subject,
                 "html": message.alternatives[0][0] if message.alternatives else message.body,
