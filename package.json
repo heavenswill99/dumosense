@@ -61,8 +61,8 @@
     "zod": "3.24.4"
   },
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
+    "start": "node ../dev.js",
+    "dev": "node ../dev.js",
     "build": "vite build",
     "preview": "vite preview",
     "test": "craco test"
@@ -82,8 +82,6 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@craco/craco": "7.1.0",
-    "@emergentbase/overlay": "https://assets.emergent.sh/npm/emergentbase-overlay-0.1.28.tgz",
-    "@emergentbase/visual-edits": "https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.13.tgz",
     "@eslint/js": "9.23.0",
     "@types/lodash": "4.17.24",
     "@vitejs/plugin-react": "^5.0.4",

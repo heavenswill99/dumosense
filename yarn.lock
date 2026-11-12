@@ -59,7 +59,7 @@
     eslint-visitor-keys "^2.1.0"
     semver "^6.3.1"
 
-"@babel/generator@^7.0.0", "@babel/generator@^7.29.7", "@babel/generator@^7.29.8", "@babel/generator@^7.7.2":
+"@babel/generator@^7.29.7", "@babel/generator@^7.29.8", "@babel/generator@^7.7.2":
   version "7.29.8"
   resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.29.8.tgz"
   integrity sha512-gZbepsdh3WDtgZKWL+vTPh71LSBrm/Y4/QDZBVCcYfmeTEEuoOYwlSy+G1StfJg+/Zy550u/3TATbm7qDbbMtg==
@@ -221,7 +221,7 @@
     "@babel/template" "^7.29.7"
     "@babel/types" "^7.29.7"
 
-"@babel/parser@^7.0.0", "@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.20.7", "@babel/parser@^7.29.7", "@babel/parser@^7.29.8":
+"@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.20.7", "@babel/parser@^7.29.7", "@babel/parser@^7.29.8":
   version "7.29.8"
   resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.29.8.tgz"
   integrity sha512-E8lTAYNB1KW+FH+VGJuZM1ioAx2E6oVlvQFRrf5P8ZZmsiJXYAD9vTFV7yyEURNzgh1dFqMZuO6tUwcARbqFCA==
@@ -1093,7 +1093,7 @@
     "@babel/parser" "^7.29.7"
     "@babel/types" "^7.29.7"
 
-"@babel/traverse@^7.0.0", "@babel/traverse@^7.29.7", "@babel/traverse@^7.29.8", "@babel/traverse@^7.7.2":
+"@babel/traverse@^7.29.7", "@babel/traverse@^7.29.8", "@babel/traverse@^7.7.2":
   version "7.29.8"
   resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.29.8.tgz"
   integrity sha512-I5z7H3bf/41ktsNVLtpN0wAa336HkqIHQ5BuPLEhTkt1jVSyZpeNKIzTgEWmlxjdg81R0IgUCcaE+Ok3NvrfZg==
@@ -1254,18 +1254,6 @@
   version "1.5.0"
   resolved "https://registry.npmjs.org/@date-fns/tz/-/tz-1.5.0.tgz"
   integrity sha512-lwYN/vDPeNRULcepoE/LO2Pgx+7/RV+S9ARfbc9lr2DtGkOD7pAiruHvbR1RX3Qyf6ja47EWJDMsNK5vK08DJg==
-
-"@emergentbase/overlay@https://assets.emergent.sh/npm/emergentbase-overlay-0.1.28.tgz":
-  version "0.1.28"
-  resolved "https://assets.emergent.sh/npm/emergentbase-overlay-0.1.28.tgz"
-  integrity sha512-ElBbgLUzf4eI9Shi/DVgiMMqAyWDTnydmZAn9MijWlUoYGV6bS02igXw6DV9qJLJcBbAlYTIcGmudMVQTSmY1g==
-  dependencies:
-    "@jridgewell/trace-mapping" "^0.3.25"
-
-"@emergentbase/visual-edits@https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.13.tgz":
-  version "1.0.12"
-  resolved "https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.13.tgz"
-  integrity sha512-9eb2i2ZJAVYaIMXs7e7h9vR3AI6FWNgDBfiFEx0qsScYgEgQgyKdC5+27L8BUz3CPbrOUPp0MiSe6bGKbvNdXQ==
 
 "@esbuild/win32-x64@0.25.12":
   version "0.25.12"
@@ -10837,7 +10825,7 @@ victory-vendor@^37.0.2:
     d3-time "^3.0.0"
     d3-timer "^3.0.1"
 
-"vite@^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0", "vite@^5.0.0 || ^6.0.0", vite@^6.4.3, vite@>=6:
+"vite@^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0", vite@^6.4.3:
   version "6.4.3"
   resolved "https://registry.npmjs.org/vite/-/vite-6.4.3.tgz"
   integrity sha512-NTKlcQjlAK7MlQoyb6LgaqHc8sso/pVyUJYWMws3jg21uTJw/LddqIFPcPqP6PzpgbIcZyKI85sFE4HBrQDA8A==

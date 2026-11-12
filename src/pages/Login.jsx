@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { OnboardingLayout } from "@/components/OnboardingLayout";
 import { FormField } from "@/components/FormField";
 import { Button } from "@/components/ui/button";
-import { api, apiError } from "@/lib/api";
+import { api, apiError, ensureCsrf } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { nextOnboardingRoute } from "@/lib/onboarding";
 
@@ -20,11 +20,16 @@ export default function Login() {
     setServerError("");
     setLoading(true);
     try {
-      const { data } = await api.post("/auth/login", form);
+      await ensureCsrf();
+      await api.post("/auth/browser-login/", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
+      const { data } = await api.get("/auth/me/");
       setUser(data);
       navigate(nextOnboardingRoute(data));
     } catch (err) {
-      setServerError(apiError(err.response?.data?.detail) || "Could not sign you in.");
+      setServerError(apiError(err) || "Could not sign you in.");
     } finally {
       setLoading(false);
     }

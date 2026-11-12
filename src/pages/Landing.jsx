@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Wordmark } from "@/components/Wordmark";
 import { CoreMark } from "@/components/CoreMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import WaitlistModal from "@/components/WaitlistModal";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Check, Menu, X, Brain, Target, Puzzle, Sparkles, Activity,
@@ -143,8 +144,12 @@ function Cell({ value }) {
 export default function Landing() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
 
-  const startFree = () => navigate("/start");
+  const startFree = () => {
+    setMenuOpen(false);
+    setWaitlistOpen(true);
+  };
   const signIn = () => navigate("/login");
   const scrollTo = (id) => {
     setMenuOpen(false);
@@ -178,10 +183,10 @@ export default function Landing() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Button
-              variant="ghost" data-testid="nav-sign-in" onClick={signIn}
+              variant="ghost" data-testid="nav-sign-up" onClick={startFree}
               className="hidden rounded-full text-foreground hover:bg-surface-hover sm:inline-flex"
             >
-              Sign in
+              Sign Up
             </Button>
             <Button
               data-testid="nav-start-free" onClick={startFree}
@@ -209,9 +214,13 @@ export default function Landing() {
                 {n.label}
               </button>
             ))}
-            <button onClick={() => { setMenuOpen(false); signIn(); }} data-testid="nav-mobile-sign-in"
+            <button onClick={startFree} data-testid="nav-mobile-start-free"
+              className="block w-full rounded-xl px-3 py-3 text-left text-sm font-medium text-primary hover:bg-surface-hover">
+              Join the waitlist
+            </button>
+            <button onClick={startFree} data-testid="nav-mobile-sign-up"
               className="block w-full rounded-xl px-3 py-3 text-left text-sm text-foreground hover:bg-surface-hover">
-              Sign in
+              Sign Up
             </button>
           </div>
         )}
@@ -599,6 +608,7 @@ export default function Landing() {
           </p>
         </div>
       </footer>
+      <WaitlistModal open={waitlistOpen} onOpenChange={setWaitlistOpen} />
     </div>
   );
 }

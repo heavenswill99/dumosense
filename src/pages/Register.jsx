@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { OnboardingLayout } from "@/components/OnboardingLayout";
 import { FormField } from "@/components/FormField";
 import { Button } from "@/components/ui/button";
-import { api, apiError } from "@/lib/api";
+import { api, apiError, ensureCsrf } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Register() {
@@ -34,15 +34,45 @@ export default function Register() {
     setServerError("");
     if (!validate()) return;
     setLoading(true);
+
+    const payload = {
+      first_name: form.first_name.trim(),
+      last_name: form.last_name.trim(),
+      email: form.email.trim().toLowerCase(),
+      password: form.password,
+    };
+
     try {
-      const { data } = await api.post("/auth/register", form);
+      await ensureCsrf();
+      await api.post("/auth/register/", payload);
+      await api.post("/auth/browser-login/", {
+        email: payload.email,
+        password: payload.password,
+      });
+      const { data } = await api.get("/auth/me/");
       setUser(data);
+
       if (startingPoint) {
-        await api.put("/onboarding", { starting_point: startingPoint });
+        try {
+          await api.put("/onboarding/", { starting_point: startingPoint });
+        } catch {
+          // optional step, never block signup
+        }
       }
       navigate("/privacy-promise");
     } catch (err) {
-      setServerError(apiError(err.response?.data?.detail) || "Could not create your account.");
+      const data = err.response?.data;
+      if (data && typeof data === "object" && !data.detail) {
+        const fieldErrors = {};
+        for (const key of ["first_name", "last_name", "email", "password"]) {
+          if (data[key]) fieldErrors[key] = [].concat(data[key]).join(" ");
+        }
+        if (Object.keys(fieldErrors).length) {
+          setErrors(fieldErrors);
+          return;
+        }
+      }
+      setServerError(apiError(err) || "Could not create your account.");
     } finally {
       setLoading(false);
     }
@@ -53,7 +83,7 @@ export default function Register() {
       <div className="mx-auto max-w-md">
         <h1 className="font-display text-3xl font-normal tracking-tight text-foreground">Create your account</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          A few basics to begin. You can add more later — nothing sensitive is needed now.
+          A few basics to begin. You can add more later. Nothing sensitive is needed now.
         </p>
 
         <form onSubmit={submit} className="flex flex-col gap-4" noValidate>

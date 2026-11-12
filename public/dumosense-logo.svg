@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="96" viewBox="0 0 560 96" role="img" aria-labelledby="title">
+  <title id="title">Dumosense</title>
+  <g fill="none" stroke="#f4d9e1" stroke-width="5">
+    <circle cx="159" cy="48" r="25"/>
+    <circle cx="150" cy="31" r="4" fill="#fff4f7" stroke="none"/>
+  </g>
+  <g fill="#fff4f7" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="300" letter-spacing="9">
+    <text x="0" y="65">DUM</text>
+    <text x="198" y="65">SENSE</text>
+  </g>
+</svg>
