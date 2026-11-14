@@ -66,5 +66,5 @@ urlpatterns = [
     "insights/",
     MindGuardInsightListView.as_view(),
     name="mindguard-insight-list",
-   ), 
+   ),
 ]

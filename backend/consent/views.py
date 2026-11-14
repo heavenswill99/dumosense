@@ -167,7 +167,7 @@ class ConsentWithdrawView(generics.GenericAPIView):
     def _next_history_id(self):
         return f"CH{uuid.uuid4().hex[:16].upper()}"
 
-    
+
 class ConsentGrantView(generics.GenericAPIView):
     serializer_class = ConsentGrantSerializer
     permission_classes = [IsAuthenticated]

@@ -54,7 +54,7 @@ class AssessmentSessionCreateView(generics.GenericAPIView):
 
         with transaction.atomic():
             session_id = f"SES{uuid.uuid4().hex[:16].upper()}"
-           
+
             session = AssessmentSession.objects.create(
                 session_id=session_id,
                 user=request.user,

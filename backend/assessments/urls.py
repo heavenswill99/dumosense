@@ -5,7 +5,6 @@ from .views import (
     AssessmentSessionCompleteView,
 )
 
-from waitlist.views import WaitlistRegistrationView
 
 
 urlpatterns = [
@@ -19,8 +18,8 @@ urlpatterns = [
         "sessions/<str:session_id>/complete/",
         AssessmentSessionCompleteView.as_view(),
         name="assessment-session-complete",
-    ),   
-    
-    
+    ),
+
+
 
 ]
