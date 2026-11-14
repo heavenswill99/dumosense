@@ -1,9 +1,13 @@
 """Read-only Django-to-MindGuard ML integration."""
 
-import json
-import subprocess
+import sys
 from pathlib import Path
+from django.conf import settings
+
+
 from hashlib import sha256
+
+
 
 from django.core.exceptions import PermissionDenied, ValidationError
 
@@ -12,10 +16,16 @@ from consent.models import Consent
 from mindguard.models import CognitiveResult
 
 
-BACKEND_DIR = Path(__file__).resolve().parents[1]
-ML_DIR = BACKEND_DIR.parent / "ml"
-ML_PYTHON = ML_DIR / "mlenv" / "Scripts" / "python.exe"
-ML_WORKER = ML_DIR / "src" / "integration" / "worker.py"
+ML_SRC = Path(settings.BASE_DIR).resolve().parent / "ml" / "src"
+
+if not ML_SRC.is_dir():
+    raise RuntimeError(f"MindGuard ML directory not found: {ML_SRC}")
+
+if str(ML_SRC) not in sys.path:
+    sys.path.insert(0, str(ML_SRC))
+
+from insight_adapter import build_insight
+from engine_v3 import compute_baseline_sequence
 
 
 def generate_mindguard_insight(*, user, session_id):
@@ -122,40 +132,32 @@ def generate_mindguard_insight(*, user, session_id):
         "consent_verified": True,
     }
 
-    if not ML_PYTHON.is_file() or not ML_WORKER.is_file():
-        raise ValidationError("MindGuard ML worker is unavailable.")
+    values = [
+    item["accuracy"]
+    for item in payload["history"]
+]
 
-    try:
-        completed = subprocess.run(
-            [str(ML_PYTHON), str(ML_WORKER)],
-            input=json.dumps(payload),
-            text=True,
-            capture_output=True,
-            timeout=30,
-            check=False,
-        )
-    except (OSError, subprocess.TimeoutExpired) as exc:
-        raise ValidationError(
-            "MindGuard ML worker could not complete."
-        ) from exc
+    timestamps = [
+        item["calculated_at"]
+        for item in payload["history"]
+    ]
 
-    if completed.returncode != 0:
-        raise ValidationError("MindGuard ML worker rejected the request.")
+    values.append(accuracy)
+    timestamps.append(session.started_at.isoformat())
 
-    try:
-        response = json.loads(completed.stdout)
-    except json.JSONDecodeError as exc:
-        raise ValidationError("Invalid response from MindGuard ML worker.") from exc
+    baseline = compute_baseline_sequence(
+        values,
+        timestamps,
+    )[-1]
 
-    if response.get("success") is not True:
-        raise ValidationError("MindGuard ML worker returned an error.")
+    record["baselines"] = {
+        "per_domain": baseline
+    }
 
-    insight = response["result"]
+    insight_data = build_insight(
+    record,
+    authenticated_user_id=str(user.pk),
+    consent_verified=True,
+)
 
-    if (
-        insight.get("delivery", {}).get("automatic_alert") is not False
-        or insight.get("delivery", {}).get("clinical_claim") is not False
-    ):
-        raise ValidationError("Unsafe MindGuard insight response.")
-
-    return insight
+    return insight_data

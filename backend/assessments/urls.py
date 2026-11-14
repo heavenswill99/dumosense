@@ -6,6 +6,7 @@ from .views import (
 )
 
 
+
 urlpatterns = [
     path(
         "sessions/",
@@ -17,6 +18,8 @@ urlpatterns = [
         "sessions/<str:session_id>/complete/",
         AssessmentSessionCompleteView.as_view(),
         name="assessment-session-complete",
-    ),    
+    ),
+
+
 
 ]

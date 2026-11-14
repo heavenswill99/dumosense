@@ -1,5 +1,7 @@
 from django.db import transaction
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -32,6 +34,8 @@ from rest_framework.exceptions import (
 )
 
 from intelligence.orchestration import process_mindguard_assessment
+
+import uuid
 
 
 class CognitiveResponseCreateView(generics.GenericAPIView):
@@ -84,71 +88,31 @@ class CognitiveResponseCreateView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # A trial number should occur only once inside a session.
-        if CognitiveResponse.objects.filter(
-            session=session,
-            trial_number=trial_number,
-        ).exists():
-            return Response(
-                {
-                    "detail":
-                    "This trial number has already been recorded."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         with transaction.atomic():
-            last_response = CognitiveResponse.objects.order_by(
-                "-response_id"
+            locked_session = AssessmentSession.objects.select_for_update().filter(
+                session_id=session_id, user=request.user
             ).first()
-
-            if last_response is None:
-                response_id = "RSP00000001"
-            else:
-                next_number = int(
-                    last_response.response_id.replace("RSP", "")
-                ) + 1
-                response_id = f"RSP{next_number:08d}"
-
+            if locked_session is None:
+                return Response({"detail": "Assessment session not found."}, status=404)
+            if locked_session.session_status != "started":
+                return Response({"detail": "Assessment session is no longer active."}, status=400)
+            if CognitiveResponse.objects.filter(session=locked_session, trial_number=trial_number).exists():
+                return Response({"detail": "This trial has already been recorded."}, status=400)
             response = CognitiveResponse.objects.create(
-                response_id=response_id,
-                session=session,
-                task=task,
-                trial_number=trial_number,
-                stimulus_type=serializer.validated_data[
-                    "stimulus_type"
-                ],
-                response_type=serializer.validated_data[
-                    "response_type"
-                ],
+                response_id=f"RSP{uuid.uuid4().hex[:16].upper()}",
+                session=locked_session, task=task, trial_number=trial_number,
+                stimulus_type=serializer.validated_data["stimulus_type"],
+                response_type=serializer.validated_data["response_type"],
                 is_correct=serializer.validated_data["is_correct"],
-                reaction_time_ms=serializer.validated_data[
-                    "reaction_time_ms"
-                ],
-                response_value=serializer.validated_data.get(
-                    "response_value"
-                ),
-                omission=serializer.validated_data["omission"],
-                recorded_at=timezone.now(),
+                reaction_time_ms=serializer.validated_data["reaction_time_ms"],
+                response_value=serializer.validated_data.get("response_value"),
+                omission=serializer.validated_data["omission"], recorded_at=timezone.now(),
             )
+        return Response({"response_id": response.response_id, "session_id": response.session_id,
+                         "task_id": response.task_id, "trial_number": response.trial_number,
+                         "recorded_at": response.recorded_at}, status=status.HTTP_201_CREATED)
 
-        return Response(
-            {
-                "response_id": response.response_id,
-                "session_id": response.session_id,
-                "task_id": response.task_id,
-                "trial_number": response.trial_number,
-                "stimulus_type": response.stimulus_type,
-                "response_type": response.response_type,
-                "is_correct": response.is_correct,
-                "reaction_time_ms": response.reaction_time_ms,
-                "response_value": response.response_value,
-                "omission": response.omission,
-                "recorded_at": response.recorded_at,
-            },
-            status=status.HTTP_201_CREATED,
-        )
-
+@method_decorator(never_cache, name="dispatch")
 class CognitiveResultDetailView(generics.RetrieveAPIView):
     serializer_class = CognitiveResultSerializer
     permission_classes = [
@@ -170,6 +134,7 @@ class CognitiveResultDetailView(generics.RetrieveAPIView):
             )
         )
 
+@method_decorator(never_cache, name="dispatch")
 class CognitiveResultListView(generics.ListAPIView):
     serializer_class = CognitiveResultSerializer
     permission_classes = [
@@ -220,17 +185,8 @@ class WellbeingCheckinCreateView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         with transaction.atomic():
-            last_checkin = WellbeingCheckin.objects.order_by(
-                "-checkin_id"
-            ).first()
 
-            if last_checkin is None:
-                checkin_id = "WBC00000001"
-            else:
-                next_number = int(
-                    last_checkin.checkin_id.replace("WBC", "")
-                ) + 1
-                checkin_id = f"WBC{next_number:08d}"
+            checkin_id = f"WBC{uuid.uuid4().hex[:16].upper()}"
 
             checkin = WellbeingCheckin.objects.create(
                 checkin_id=checkin_id,
@@ -314,17 +270,7 @@ class ContextRecordCreateView(generics.GenericAPIView):
                 )
 
         with transaction.atomic():
-            last_context = ContextRecord.objects.order_by(
-                "-context_id"
-            ).first()
-
-            if last_context is None:
-                context_id = "CTX00000001"
-            else:
-                next_number = int(
-                    last_context.context_id.replace("CTX", "")
-                ) + 1
-                context_id = f"CTX{next_number:08d}"
+            context_id = f"CTX{uuid.uuid4().hex[:16].upper()}"
 
             context = ContextRecord.objects.create(
                 context_id=context_id,
@@ -423,6 +369,11 @@ class MindGuardInsightGenerateView(APIView):
             raise DRFValidationError(
                 "Assessment cannot be processed."
             )
+
+        if isinstance(insight, dict) and insight.get("status") == "inference_pending":
+            # Do not forward arbitrary worker payloads to the public API.
+            return Response({"session_id": session_id, "status": "inference_pending"},
+                            status=status.HTTP_202_ACCEPTED)
 
         return Response(
             {

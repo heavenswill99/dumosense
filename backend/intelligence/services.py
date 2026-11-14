@@ -14,50 +14,79 @@ def make_mindguard_insight_id(run_id):
     ).hexdigest()[:17]
 
 
+
 def save_mindguard_insight(*, user_id, insight_data):
-    """Persist a validated MindGuard run and insight atomically."""
+    """Persist a MindGuard run, insight and recommendation atomically."""
     from django.core.exceptions import ValidationError
     from django.db import transaction
     from django.utils import timezone
 
-    from intelligence.models import IntelligenceRun, Insight
+    from intelligence.models import IntelligenceRun, Insight, Recommendation
 
     if not user_id or not isinstance(insight_data, dict):
         raise ValidationError("Invalid MindGuard persistence request.")
 
     trace = insight_data.get("traceability")
     content = insight_data.get("insight")
+    recommendation_data = insight_data.get("recommendation")
     delivery = insight_data.get("delivery")
 
-    if not all(isinstance(item, dict) for item in (trace, content, delivery)):
-        raise ValidationError("Incomplete MindGuard insight.")
+    if not all(
+        isinstance(item, dict)
+        for item in (trace, content, recommendation_data, delivery)
+    ):
+        raise ValidationError("Incomplete MindGuard output.")
 
     if (
         insight_data.get("product_code") != "MINDGUARD"
         or delivery.get("automatic_alert") is not False
         or delivery.get("clinical_claim") is not False
     ):
-        raise ValidationError("Unsafe MindGuard insight.")
+        raise ValidationError("Unsafe MindGuard output.")
 
     run_id = trace.get("run_id")
     model_version = trace.get("model_version")
+    session_id = trace.get("session_id")
     insight_type = content.get("insight_type")
     insight_text = content.get("text")
+    recommendation_type = recommendation_data.get("recommendation_type")
+    recommendation_text = recommendation_data.get("text")
 
-    if (
-        not isinstance(run_id, str)
-        or not 0 < len(run_id) <= 20
-        or not isinstance(model_version, str)
-        or not model_version
-        or not isinstance(insight_type, str)
-        or not insight_type
-        or not isinstance(insight_text, str)
-        or not insight_text
-        or not trace.get("session_id")
-    ):
-        raise ValidationError("Invalid MindGuard insight fields.")
+    required_strings = (
+        run_id, model_version, session_id,
+        insight_type, insight_text,
+        recommendation_type, recommendation_text,
+    )
+
+    if any(not isinstance(value, str) or not value.strip()
+           for value in required_strings):
+        raise ValidationError("Missing MindGuard output fields.")
+
+    if len(run_id) > 20:
+        raise ValidationError("MindGuard run ID exceeds database limit.")
+
+    if len(model_version) > 100:
+        raise ValidationError("Model version exceeds database limit.")
+
+    if len(insight_type) > 100 or len(recommendation_type) > 100:
+        raise ValidationError("MindGuard output type exceeds database limit.")
+
+    if len(session_id) > 20:
+        raise ValidationError("Invalid assessment session ID.")
+
+    if content.get("priority") not in ("low",):
+        raise ValidationError("Unsupported insight priority.")
+
+    if recommendation_data.get("priority") not in ("low",):
+        raise ValidationError("Unsupported recommendation priority.")
 
     insight_id = make_mindguard_insight_id(run_id)
+
+    recommendation_id = (
+        "REC" + sha256(
+            f"{run_id}|recommendation".encode("utf-8")
+        ).hexdigest()[:17]
+    )
 
     with transaction.atomic():
         run, _ = IntelligenceRun.objects.get_or_create(
@@ -76,8 +105,10 @@ def save_mindguard_insight(*, user_id, insight_data):
             run.user_id != user_id
             or run.product_code != "MINDGUARD"
             or run.model_or_rule_version != model_version
+            or run.trigger_type != "assessment_completed"
+            or run.run_status != "completed"
         ):
-            raise ValidationError("Conflicting MindGuard intelligence run.")
+            raise ValidationError("Conflicting MindGuard run.")
 
         insight, _ = Insight.objects.get_or_create(
             insight_id=insight_id,
@@ -87,13 +118,44 @@ def save_mindguard_insight(*, user_id, insight_data):
                 "product_code": "MINDGUARD",
                 "insight_type": insight_type,
                 "insight_text": insight_text,
-                "severity_or_priority": content.get("priority"),
+                "severity_or_priority": content["priority"],
                 "explanation_text": content.get("explanation"),
                 "generated_at": timezone.now(),
             },
         )
 
-        if insight.run_id != run_id or insight.user_id != user_id:
+        if (
+            insight.run_id != run_id
+            or insight.user_id != user_id
+            or insight.product_code != "MINDGUARD"
+            or insight.insight_type != insight_type
+            or insight.insight_text != insight_text
+            or insight.severity_or_priority != content["priority"]
+            or insight.explanation_text != content.get("explanation")
+        ):
             raise ValidationError("Conflicting MindGuard insight.")
+
+        recommendation, _ = Recommendation.objects.get_or_create(
+            recommendation_id=recommendation_id,
+            defaults={
+                "insight": insight,
+                "user_id": user_id,
+                "product_code": "MINDGUARD",
+                "recommendation_type": recommendation_type,
+                "recommendation_text": recommendation_text,
+                "priority": recommendation_data["priority"],
+                "created_at": timezone.now(),
+            },
+        )
+
+        if (
+            recommendation.insight_id != insight_id
+            or recommendation.user_id != user_id
+            or recommendation.product_code != "MINDGUARD"
+            or recommendation.recommendation_type != recommendation_type
+            or recommendation.recommendation_text != recommendation_text
+            or recommendation.priority != recommendation_data["priority"]
+        ):
+            raise ValidationError("Conflicting MindGuard recommendation.")
 
     return insight
