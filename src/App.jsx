@@ -1,6 +1,7 @@
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
+import SiteChatbot from "@/components/SiteChatbot";
 
 import { AppShell } from "@/components/AppShell";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
@@ -31,6 +32,15 @@ function Shell({ children }) {
   );
 }
 
+function FeatureRoute({ Component }) {
+  const { search } = useLocation();
+  const previewMode =
+    import.meta.env.DEV &&
+    new URLSearchParams(search).get("preview") === "1";
+  const page = <Component previewMode={previewMode} />;
+  return previewMode ? <AppShell previewMode>{page}</AppShell> : <Shell>{page}</Shell>;
+}
+
 function AppRouter() {
   return (
     <Routes>
@@ -43,8 +53,8 @@ function AppRouter() {
       <Route path="/profile-setup" element={<ProtectedRoute><ProfileSetup /></ProtectedRoute>} />
       <Route path="/profile-complete" element={<ProtectedRoute><ProfileComplete /></ProtectedRoute>} />
       <Route path="/app" element={<Shell><Home /></Shell>} />
-      <Route path="/app/mindguard" element={<Shell><MindGuard /></Shell>} />
-      <Route path="/app/health-reserve" element={<Shell><HealthReserve /></Shell>} />
+      <Route path="/app/mindguard" element={<FeatureRoute Component={MindGuard} />} />
+      <Route path="/app/health-reserve" element={<FeatureRoute Component={HealthReserve} />} />
       <Route path="/app/ai" element={<Shell><DumosenseAI /></Shell>} />
       <Route path="/app/profile" element={<Shell><Profile /></Shell>} />
       <Route path="/app/membership" element={<Shell><Membership /></Shell>} />
@@ -59,6 +69,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AppRouter />
+        <SiteChatbot />
         <Toaster position="top-center" />
       </BrowserRouter>
     </div>

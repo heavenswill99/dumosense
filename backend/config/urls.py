@@ -20,8 +20,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from accounts.views import UserProfileView, ProductEnrollmentListView
+from accounts.views import OnboardingView, UserProfileView, ProductEnrollmentListView
 from consent.views import ConsentListView,  ConsentWithdrawView, ConsentGrantView
+from intelligence.views import AIChatView, AIExplainView, DemoStatusView, HomeDashboardView
 from waitlist.views import WaitlistRegistrationView
 
 
@@ -36,6 +37,20 @@ urlpatterns = [
 
     # Authentication
     path("api/v1/auth/", include("accounts.urls")),
+
+    # Account onboarding
+    path("api/v1/onboarding", OnboardingView.as_view(), name="onboarding"),
+    path("api/v1/onboarding/", OnboardingView.as_view(), name="onboarding-slash"),
+
+    # Dashboard
+    path("api/v1/home", HomeDashboardView.as_view(), name="home-dashboard"),
+    path("api/v1/home/", HomeDashboardView.as_view(), name="home-dashboard-slash"),
+    path("api/v1/demo/status", DemoStatusView.as_view(), name="demo-status"),
+    path("api/v1/demo/status/", DemoStatusView.as_view(), name="demo-status-slash"),
+    path("api/v1/ai/chat", AIChatView.as_view(), name="ai-chat"),
+    path("api/v1/ai/chat/", AIChatView.as_view(), name="ai-chat-slash"),
+    path("api/v1/ai/explain", AIExplainView.as_view(), name="ai-explain"),
+    path("api/v1/ai/explain/", AIExplainView.as_view(), name="ai-explain-slash"),
 
     # User profile
     path("api/v1/profile/", UserProfileView.as_view(), name="user-profile"),

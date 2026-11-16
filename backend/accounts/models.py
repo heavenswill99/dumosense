@@ -53,6 +53,23 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
+
+class OnboardingState(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="onboarding_state",
+    )
+    privacy_accepted = models.BooleanField(default=False)
+    consent_complete = models.BooleanField(default=False)
+    profile_complete = models.BooleanField(default=False)
+    starting_point = models.CharField(max_length=50, blank=True, default="")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "user_onboarding"
+
     
 class UserProfile(models.Model):
     profile_id = models.CharField(

@@ -2,7 +2,7 @@ import secrets
 
 from rest_framework import serializers
 
-from .models import User, UserProfile, ProductEnrollment
+from .models import OnboardingState, User, UserProfile, ProductEnrollment
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -88,7 +88,49 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class CurrentUserSerializer(serializers.ModelSerializer):
+    onboarding = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["user_id", "first_name", "last_name", "email", "account_status"]
+        fields = [
+            "user_id",
+            "first_name",
+            "last_name",
+            "email",
+            "account_status",
+            "onboarding",
+        ]
         read_only_fields = fields
+
+    def get_onboarding(self, user):
+        state = OnboardingState.objects.filter(user=user).first()
+        if state is None:
+            return {
+                "privacy_accepted": False,
+                "consent_complete": False,
+                "profile_complete": False,
+                "starting_point": "",
+            }
+        return {
+            "privacy_accepted": state.privacy_accepted,
+            "consent_complete": state.consent_complete,
+            "profile_complete": state.profile_complete,
+            "starting_point": state.starting_point,
+        }
+
+
+class OnboardingStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OnboardingState
+        fields = [
+            "privacy_accepted",
+            "consent_complete",
+            "profile_complete",
+            "starting_point",
+        ]
+        extra_kwargs = {
+            "privacy_accepted": {"required": False},
+            "consent_complete": {"required": False},
+            "profile_complete": {"required": False},
+            "starting_point": {"required": False},
+        }

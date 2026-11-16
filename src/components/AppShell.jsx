@@ -8,7 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 import { Bell } from "lucide-react";
 
-function NavList({ orientation }) {
+function NavList({ orientation, previewMode = false }) {
   const mobile = orientation === "mobile";
   return (
     <nav
@@ -18,7 +18,7 @@ function NavList({ orientation }) {
       {NAV_ITEMS.map(({ key, label, to, icon: Icon, testid }) => (
         <NavLink
           key={key}
-          to={to}
+          to={previewMode && (to === "/app/mindguard" || to === "/app/health-reserve") ? `${to}?preview=1` : to}
           end={to === "/app"}
           data-testid={testid}
           className={({ isActive }) =>
@@ -61,14 +61,18 @@ const TITLES = {
   "/app/privacy": { title: "Privacy Center", desc: "Your data, connected sources, permissions and history." },
 };
 
-export function AppShell({ children }) {
+export function AppShell({ children, previewMode = false }) {
   const location = useLocation();
   const meta = TITLES[location.pathname] || TITLES["/app"];
   const [demoMode, setDemoMode] = useState(null);
 
   useEffect(() => {
+    if (previewMode) {
+      setDemoMode(null);
+      return;
+    }
     api.get("/demo/status").then(({ data }) => setDemoMode(data.demo_mode)).catch(() => {});
-  }, [location.pathname]);
+  }, [location.pathname, previewMode]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -81,7 +85,7 @@ export function AppShell({ children }) {
           </p>
         </div>
         <div className="mt-10 flex-1">
-          <NavList orientation="desktop" />
+          <NavList orientation="desktop" previewMode={previewMode} />
         </div>
         <div className="flex items-center justify-between border-t border-border pt-4">
           <span className="text-xs text-muted-foreground">Appearance</span>
@@ -143,7 +147,7 @@ export function AppShell({ children }) {
         style={{ background: "var(--header-bg)" }}
       >
         <div className="mx-auto max-w-lg px-2 pb-[env(safe-area-inset-bottom)]">
-          <NavList orientation="mobile" />
+          <NavList orientation="mobile" previewMode={previewMode} />
         </div>
       </div>
     </div>

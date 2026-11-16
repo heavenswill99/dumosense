@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { OnboardingLayout } from "@/components/OnboardingLayout";
 import { FormField } from "@/components/FormField";
 import { Button } from "@/components/ui/button";
@@ -8,9 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Register() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { setUser } = useAuth();
-  const startingPoint = location.state?.starting_point;
 
   const [form, setForm] = useState({ first_name: "", last_name: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -51,15 +49,7 @@ export default function Register() {
       });
       const { data } = await api.get("/auth/me/");
       setUser(data);
-
-      if (startingPoint) {
-        try {
-          await api.put("/onboarding/", { starting_point: startingPoint });
-        } catch {
-          // optional step, never block signup
-        }
-      }
-      navigate("/privacy-promise");
+      navigate("/app");
     } catch (err) {
       const data = err.response?.data;
       if (data && typeof data === "object" && !data.detail) {

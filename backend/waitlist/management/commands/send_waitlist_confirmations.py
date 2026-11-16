@@ -2,6 +2,7 @@ import logging
 import time
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.mail import get_connection
 from django.core.management.base import BaseCommand
 from django.db import DatabaseError, transaction
@@ -41,6 +42,9 @@ class Command(BaseCommand):
             time.sleep(interval)
 
     def process_pending(self, limit):
+        if not getattr(settings, "WAITLIST_EMAILS_ENABLED", False):
+            return 0
+
         now = timezone.now()
         retry_before = now - RETRY_DELAY
         stale_before = now - STALE_SENDING_DELAY
@@ -86,13 +90,21 @@ class Command(BaseCommand):
                 message = build_confirmation_email(registration)
                 if get_connection().send_messages([message]) != 1:
                     raise RuntimeError("Resend did not accept the confirmation email.")
-            except Exception:
+            except Exception as exc:
                 failed += 1
-                logger.exception(
-                    "Waitlist confirmation email attempt %s failed for registration id=%s.",
-                    registration.confirmation_email_attempts,
-                    registration.pk,
-                )
+                if "Resend" in str(exc) or "WAITLIST_EMAILS" in str(exc):
+                    logger.warning(
+                        "Waitlist confirmation email attempt %s for registration id=%s was skipped: %s",
+                        registration.confirmation_email_attempts,
+                        registration.pk,
+                        exc,
+                    )
+                else:
+                    logger.exception(
+                        "Waitlist confirmation email attempt %s failed for registration id=%s.",
+                        registration.confirmation_email_attempts,
+                        registration.pk,
+                    )
                 registration.confirmation_email_status = "failed"
                 try:
                     registration.save(

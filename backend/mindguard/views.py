@@ -11,14 +11,17 @@ from consent.permissions import HasRequiredConsent
 from .models import (CognitiveResponse, 
                      CognitiveResult,
                      WellbeingCheckin,
-                     ContextRecord)
+                     ContextRecord,
+                     MindGuardDataConsent,
+                     MindGuardReflection)
 
 from .serializers import (CognitiveResponseCreateSerializer, 
                           CognitiveResultSerializer,
                           WellbeingCheckinCreateSerializer,
                           ContextRecordCreateSerializer,
                           WellbeingCheckinSerializer,
-                          ContextRecordSerializer)
+                          ContextRecordSerializer,
+                          MindGuardReflectionCreateSerializer)
 
 from django.core.exceptions import (
     PermissionDenied as DjangoPermissionDenied,
@@ -31,6 +34,7 @@ from rest_framework.exceptions import (
     ValidationError as DRFValidationError,
 )
 
+from .permissions import HasMindGuardDataConsent
 from intelligence.orchestration import process_mindguard_assessment
 
 
@@ -432,4 +436,75 @@ class MindGuardInsightGenerateView(APIView):
                 "status": "completed",
             },
             status=status.HTTP_200_OK,
+        )
+
+
+class MindGuardDataConsentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        granted = MindGuardDataConsent.objects.filter(
+            user=request.user,
+            granted=True,
+        ).exists()
+        return Response({"granted": granted})
+
+    def post(self, request):
+        if request.data.get("accepted") is not True:
+            return Response(
+                {"detail": "Explicit consent is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        consent, created = MindGuardDataConsent.objects.get_or_create(
+            user=request.user,
+            defaults={
+                "granted": True,
+                "consent_version": "v1",
+                "granted_at": timezone.now(),
+            },
+        )
+        if not created and not consent.granted:
+            consent.granted = True
+            consent.consent_version = "v1"
+            consent.granted_at = timezone.now()
+            consent.save(
+                update_fields=["granted", "consent_version", "granted_at"]
+            )
+
+        return Response(
+            {"granted": True},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
+
+
+class MindGuardReflectionCreateView(generics.GenericAPIView):
+    serializer_class = MindGuardReflectionCreateSerializer
+    permission_classes = [IsAuthenticated, HasMindGuardDataConsent]
+
+    def post(self, request, reflection_type):
+        serializer = self.get_serializer(
+            data=request.data,
+            context={
+                **self.get_serializer_context(),
+                "reflection_type": reflection_type,
+            },
+        )
+        serializer.is_valid(raise_exception=True)
+
+        reflection = MindGuardReflection.objects.create(
+            user=request.user,
+            reflection_type=reflection_type,
+            answers=serializer.validated_data["answers"],
+            question_set_version=serializer.validated_data[
+                "question_set_version"
+            ],
+            recorded_at=serializer.validated_data["timestamp"],
+        )
+        return Response(
+            {
+                "id": reflection.pk,
+                "saved": True,
+            },
+            status=status.HTTP_201_CREATED,
         )

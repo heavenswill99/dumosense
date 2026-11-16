@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3001,
       watch: {
-        ignored: ["**/dist.zip"],
+        ignored: ["**/dist*.zip"],
       },
       proxy: {
         "/api": "http://127.0.0.1:8000",

@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Send, Sparkles, History as HistoryIcon, X } from "lucide-react";
+import { Send, Sparkles } from "lucide-react";
 
 const SUGGESTIONS = [
-  "What is my wellbeing pattern telling you so far?",
-  "Has anything changed recently that I should notice?",
-  "How do my Ring signals relate to my check-ins?",
-  "What is a good next step for me on Dumosense?",
+  "How do I use the MindGuard check-in?",
+  "What can I do in Health Reserve?",
+  "How does Dumosense handle my messages?",
+  "Can Dumosense diagnose a condition?",
 ];
 
 function Bubble({ role, content, grounded_on }) {
@@ -52,9 +52,6 @@ export default function DumosenseAI() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [messages, setMessages] = useState([]);
   const [explanation, setExplanation] = useState(null);
-  const [consentNeeded, setConsentNeeded] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
-  const [history, setHistory] = useState([]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -62,10 +59,7 @@ export default function DumosenseAI() {
   const ctxHandled = useRef(false);
 
   useEffect(() => {
-    api.get("/ai/messages").then(({ data }) => {
-      setMessages(data.messages || []);
-      setLoaded(true);
-    });
+    setLoaded(true);
   }, []);
 
   // Contextual entry point — inherit context and show a structured explanation.
@@ -74,8 +68,8 @@ export default function DumosenseAI() {
     if (!context || ctxHandled.current) return;
     ctxHandled.current = true;
     api.post("/ai/explain", { ref: context })
-      .then(({ data }) => { if (data.sections) setExplanation(data); else if (data.consent_required) setConsentNeeded(true); })
-      .catch(() => {});
+      .then(({ data }) => { if (data.sections) setExplanation(data); })
+      .catch((error) => toast.error(apiError(error) || "Could not load this explanation."));
     setSearchParams({}, { replace: true });
   }, [searchParams, setSearchParams]);
 
@@ -83,17 +77,17 @@ export default function DumosenseAI() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, thinking, explanation]);
 
-  const send = async (text, context) => {
+  const send = async (text) => {
     const msg = (text ?? input).trim();
     if (!msg || thinking) return;
     setInput("");
     setMessages((m) => [...m, { role: "user", content: msg }]);
     setThinking(true);
     try {
-      const { data } = await api.post("/ai/chat", { message: msg, context });
+      const { data } = await api.post("/ai/chat", { message: msg });
       setMessages((m) => [...m, data]);
     } catch (err) {
-      toast.error(apiError(err.response?.data?.detail) || "Dumosense AI is unavailable right now.");
+      toast.error(apiError(err) || "Dumosense AI is unavailable right now.");
       setMessages((m) => [...m, {
         role: "assistant",
         content: "I couldn't respond just now. Please try again shortly.",
@@ -111,95 +105,25 @@ export default function DumosenseAI() {
     }
   };
 
-  const openHistory = async () => {
-    setShowHistory(true);
-    try {
-      const { data } = await api.get("/ai/history");
-      setHistory(data.items || []);
-    } catch {
-      setHistory([]);
-    }
-  };
-
-  const reopenExplanation = async (ref) => {
-    setShowHistory(false);
-    try {
-      const { data } = await api.post("/ai/explain", { ref });
-      if (data.sections) setExplanation(data);
-    } catch {
-      /* ignore */
-    }
-  };
-
   const empty = loaded && messages.length === 0 && !explanation;
 
   return (
     <div className="flex min-h-[70vh] flex-col">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div className="flex-1 rounded-3xl border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
-          Dumosense AI reflects only <span className="font-medium text-foreground">your</span> recorded
-          information and clearly separates what was observed from any interpretation. It does not
-          diagnose or give medical advice.
-        </div>
-        <button
-          type="button"
-          onClick={openHistory}
-          data-testid="ai-history-open"
-          className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full border border-border bg-background-secondary px-4 text-sm text-foreground transition-colors hover:bg-surface-hover"
-        >
-          <HistoryIcon className="h-4 w-4" /> History
-        </button>
+      <div className="mb-4 rounded-3xl border border-border bg-secondary/40 p-4 text-sm text-muted-foreground">
+        Dumosense Assistant answers general questions about the site and wellbeing. It runs on the
+        Dumosense backend, does not access your saved health records, and does not diagnose or give
+        medical advice. Avoid sharing sensitive personal information.
       </div>
 
-      {showHistory && (
-        <div data-testid="ai-history" className="mb-4 rounded-3xl border border-border bg-card p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <p className="font-display text-base font-medium text-foreground">Past intelligence</p>
-            <button onClick={() => setShowHistory(false)} aria-label="Close history" data-testid="ai-history-close"
-              className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
-          </div>
-          {history.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No past questions or explanations yet.</p>
-          ) : (
-            <ul className="space-y-2">
-              {history.map((h, i) => (
-                <li key={i}>
-                  <button
-                    type="button"
-                    onClick={() => h.type === "explanation" ? reopenExplanation(h.context) : setShowHistory(false)}
-                    data-testid="ai-history-item"
-                    className="w-full rounded-2xl border border-border bg-background-secondary p-3 text-left transition-colors hover:bg-surface-hover"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-medium text-foreground">{h.title}</span>
-                      <span className="shrink-0 text-[11px] text-muted-foreground">
-                        {h.created_at ? new Date(h.created_at).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : ""}
-                      </span>
-                    </div>
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{h.preview}</p>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-
       <div className="flex-1 space-y-5" data-testid="ai-messages">
-        {consentNeeded && (
-          <div data-testid="ai-consent-needed" className="rounded-3xl border border-rose/40 bg-rose/5 p-5 text-sm text-foreground">
-            To let Dumosense AI interpret your data, please enable <span className="font-medium">AI use</span> in
-            Profile → Your data permissions.
-          </div>
-        )}
         {explanation && <StructuredExplanation data={explanation} />}
         {empty && (
           <div className="flex flex-col items-center py-8 text-center">
             <CoreMark state="learning" size={72} className="mb-5" />
-            <p className="font-display text-xl font-medium text-foreground">Ask about your health picture.</p>
+            <p className="font-display text-xl font-medium text-foreground">How can I help?</p>
             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-              I connect your MindGuard wellbeing and Health Reserve preparedness into one plain-language
-              view.
+              Ask about Dumosense features or general wellbeing topics. Replies are generated by the
+              site backend and aren't based on your personal health records.
             </p>
             <div className="mt-6 grid w-full max-w-xl gap-2 sm:grid-cols-2">
               {SUGGESTIONS.map((s) => (
@@ -236,7 +160,7 @@ export default function DumosenseAI() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKey}
-            placeholder="Ask Dumosense AI about your pattern…"
+            placeholder="Ask about Dumosense or general wellbeing…"
             rows={1}
             data-testid="ai-input"
             className="max-h-32 min-h-[44px] resize-none border-0 bg-transparent text-base focus-visible:ring-0"

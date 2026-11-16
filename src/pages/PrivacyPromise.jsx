@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { OnboardingLayout } from "@/components/OnboardingLayout";
 import { CoreMark } from "@/components/CoreMark";
 import { Button } from "@/components/ui/button";
-import { api } from "@/lib/api";
+import { api, apiError } from "@/lib/api";
 import { ShieldCheck, Eye, GitBranch, Ban, SlidersHorizontal } from "lucide-react";
 
 const PRINCIPLES = [
@@ -18,12 +18,16 @@ export default function PrivacyPromise() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const cont = async () => {
+    setServerError("");
     setLoading(true);
     try {
       await api.put("/onboarding", { privacy_accepted: true });
       navigate("/consent");
+    } catch (error) {
+      setServerError(apiError(error));
     } finally {
       setLoading(false);
     }
@@ -62,6 +66,12 @@ export default function PrivacyPromise() {
           We aim to be clear about how your data is used and to give you meaningful choices. No system
           can promise perfect privacy or absolute security, so we focus on strong, responsible
           practices and keeping you in control of your permissions.
+        </p>
+      )}
+
+      {serverError && (
+        <p role="alert" className="mt-5 rounded-xl bg-error/10 px-4 py-3 text-sm font-medium text-error">
+          {serverError}
         </p>
       )}
 

@@ -11,10 +11,22 @@ from .views import (
     WellbeingCheckinListView,
     ContextRecordListView,
     MindGuardInsightGenerateView,
+    MindGuardDataConsentView,
+    MindGuardReflectionCreateView,
 )
 
 
 urlpatterns = [
+    path(
+        "consent/",
+        MindGuardDataConsentView.as_view(),
+        name="mindguard-data-consent",
+    ),
+    path(
+        "reflections/<str:reflection_type>/",
+        MindGuardReflectionCreateView.as_view(),
+        name="mindguard-reflection-create",
+    ),
     path(
         "sessions/<str:session_id>/responses/",
         CognitiveResponseCreateView.as_view(),

@@ -208,7 +208,6 @@ WAITLIST_WEBSITE_URL = os.getenv("WAITLIST_WEBSITE_URL", "https://dumosense.com"
 
 TEST_RUNNER = "config.test_runner.DumosenseTestRunner"
 
-# React frontend origins permitted during local development
 def env_list(name, default=""):
     return [
         item.strip()
@@ -216,29 +215,32 @@ def env_list(name, default=""):
         if item.strip()
     ]
 
+LOCAL_FRONTEND_ORIGINS = [
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+PRODUCTION_FRONTEND_ORIGINS = [
+    "https://dumosense.com",
+    "https://www.dumosense.com",
+]
 
-CORS_ALLOWED_ORIGINS = env_list(
-    "CORS_ALLOWED_ORIGINS",
-    [
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://dumosense.com",
-        "https://www.dumosense.com",
-    ],
+
+CORS_ALLOWED_ORIGINS = list(
+    dict.fromkeys(
+        env_list("CORS_ALLOWED_ORIGINS")
+        + PRODUCTION_FRONTEND_ORIGINS
+        + (LOCAL_FRONTEND_ORIGINS if DEBUG else [])
+    )
 )
 
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_TRUSTED_ORIGINS = env_list(
-    "CSRF_TRUSTED_ORIGINS",
-    [
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://dumosense.com",
-        "https://www.dumosense.com",
-    ],
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(
+        env_list("CSRF_TRUSTED_ORIGINS")
+        + PRODUCTION_FRONTEND_ORIGINS
+        + (LOCAL_FRONTEND_ORIGINS if DEBUG else [])
+    )
 )

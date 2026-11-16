@@ -242,4 +242,49 @@ class ContextRecord(models.Model):
     def __str__(self):
         return self.context_id
 
+
+class MindGuardReflection(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
+    REFLECTION_TYPES = [
+        ("wellbeing_checkin", "Wellbeing check-in"),
+        ("cognitive_checkin", "Cognitive check-in"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="mindguard_reflections",
+    )
+    reflection_type = models.CharField(max_length=32, choices=REFLECTION_TYPES)
+    answers = models.JSONField()
+    question_set_version = models.CharField(max_length=20)
+    recorded_at = models.DateTimeField()
+
+    class Meta:
+        db_table = "mindguard_reflections"
+        indexes = [
+            models.Index(
+                fields=["user", "-recorded_at"],
+                name="mg_reflection_user_time",
+            ),
+        ]
+
+
+class MindGuardDataConsent(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="mindguard_data_consent",
+    )
+    granted = models.BooleanField(default=False)
+    consent_version = models.CharField(max_length=20, default="v1")
+    granted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "mindguard_data_consents"
+
+
 # Create your models here.

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import UserProfile, ProductEnrollment
+from .models import OnboardingState, UserProfile, ProductEnrollment
 from .serializers import UserProfileSerializer, ProductEnrollmentSerializer
 
 from rest_framework import status
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
 from .serializers import UserRegistrationSerializer
-from .serializers import CurrentUserSerializer
+from .serializers import CurrentUserSerializer, OnboardingStateSerializer
 
 from django.conf import settings
 from django.middleware.csrf import get_token
@@ -80,6 +80,25 @@ class CurrentUserView(generics.RetrieveAPIView):
         return self.request.user
 
 
+class OnboardingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        state, _ = OnboardingState.objects.get_or_create(user=request.user)
+        return Response(OnboardingStateSerializer(state).data)
+
+    def put(self, request):
+        state, _ = OnboardingState.objects.get_or_create(user=request.user)
+        serializer = OnboardingStateSerializer(
+            state,
+            data=request.data,
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(CurrentUserSerializer(request.user).data)
+
+
 class BrowserLoginJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
         # Login must work without an existing access token.
@@ -142,8 +161,10 @@ class CSRFTokenView(APIView):
     authentication_classes = []
 
     def get(self, request):
+        csrf_token = get_token(request._request)
         return Response({
-            "message": "CSRF cookie initialized."
+            "message": "CSRF cookie initialized.",
+            "csrfToken": csrf_token,
         })
 
 

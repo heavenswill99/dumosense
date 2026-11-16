@@ -114,6 +114,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+        ) : home.change?.state === "no_data" ? (
+          <div className="flex items-center gap-4 rounded-3xl border border-border bg-card p-6">
+            <CoreMark state="insufficient" size={40} />
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Change insights will appear as you add observations over time.
+            </p>
+          </div>
         ) : (
           <div className="flex items-center gap-4 rounded-3xl border border-border bg-card p-6">
             <CoreMark state="static" size={40} />
@@ -155,10 +162,15 @@ export default function Home() {
             onAction={() => navigate("/app/health-reserve")}
           />
         </div>
+        {mg.count > 0 && (
+          <p data-testid="home-mindguard-activity" className="mt-4 text-sm text-muted-foreground">
+            {mg.count} MindGuard reflection{mg.count === 1 ? "" : "s"} received
+          </p>
+        )}
       </section>
 
       {/* 4. WHAT YOU CAN DO */}
-      <section data-testid="home-can-do">
+      {home.next_action && <section data-testid="home-can-do">
         <h3 className="mb-4 font-display text-lg font-medium text-foreground">What you can do</h3>
         <div data-testid="home-what-next"
           className="flex flex-col items-start gap-4 rounded-3xl border border-rose/40 bg-secondary/50 p-6 sm:flex-row sm:items-center sm:justify-between">
@@ -171,7 +183,7 @@ export default function Home() {
             {home.next_action.cta}
           </Button>
         </div>
-      </section>
+      </section>}
 
       {/* 5. WHAT YOU'RE PREPARING FOR */}
       <section data-testid="home-preparing">
@@ -213,17 +225,19 @@ export default function Home() {
       </section>
 
       {/* 6. WHAT WE'RE STILL LEARNING */}
-      <section data-testid="home-learning">
-        <h3 className="mb-4 font-display text-lg font-medium text-foreground">What we're still learning</h3>
-        <RingCard ring={home.ring} onChanged={load} />
-        {(mg.count < 5 || !hr.assessed) && (
-          <p className="mt-3 rounded-2xl bg-secondary/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-            {mg.count < 5 && "We're still learning your wellbeing pattern. "}
-            {!hr.assessed && "Your preparedness picture will take shape once you complete a Health Reserve assessment. "}
-            Insufficient data never means poor health — just that there's more to learn.
-          </p>
-        )}
-      </section>
+      {home.ring && (
+        <section data-testid="home-learning">
+          <h3 className="mb-4 font-display text-lg font-medium text-foreground">What we're still learning</h3>
+          <RingCard ring={home.ring} onChanged={load} />
+          {(mg.count < 5 || !hr.assessed) && (
+            <p className="mt-3 rounded-2xl bg-secondary/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+              {mg.count < 5 && "We're still learning your wellbeing pattern. "}
+              {!hr.assessed && "Your preparedness picture will take shape once you complete a Health Reserve assessment. "}
+              Insufficient data never means poor health — just that there's more to learn.
+            </p>
+          )}
+        </section>
+      )}
     </div>
   );
 }

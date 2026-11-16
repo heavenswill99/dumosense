@@ -5,7 +5,6 @@ import { FormField } from "@/components/FormField";
 import { Button } from "@/components/ui/button";
 import { api, apiError, ensureCsrf } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
-import { nextOnboardingRoute } from "@/lib/onboarding";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ export default function Login() {
       });
       const { data } = await api.get("/auth/me/");
       setUser(data);
-      navigate(nextOnboardingRoute(data));
+      navigate("/app");
     } catch (err) {
       setServerError(apiError(err) || "Could not sign you in.");
     } finally {

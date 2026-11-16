@@ -158,6 +158,27 @@ class UserRegistrationTests(TestCase):
             1
         )
 
+    def test_registered_account_can_log_in_with_browser_authentication(self):
+        client = APIClient(enforce_csrf_checks=True)
+        registration = client.post(self.url, self.valid_data, format="json")
+        self.assertEqual(registration.status_code, 201)
+
+        csrf = client.get(reverse("csrf_token"))
+        login = client.post(
+            reverse("browser_login"),
+            {
+                "email": self.valid_data["email"],
+                "password": self.valid_data["password"],
+            },
+            format="json",
+            HTTP_X_CSRFTOKEN=csrf.data["csrfToken"],
+        )
+
+        self.assertEqual(login.status_code, 200)
+        current_user = client.get(reverse("current_user"))
+        self.assertEqual(current_user.status_code, 200)
+        self.assertEqual(current_user.data["email"], self.valid_data["email"])
+
     def test_password_is_not_returned(self):
         response = self.client.post(
             self.url,
@@ -211,6 +232,33 @@ class CurrentUserTests(TestCase):
         response = self.client.get(self.url)
 
         self.assertNotIn("password", response.data)
+
+
+class OnboardingStateTests(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            user_id="USRONBOARD001",
+            first_name="Ada",
+            last_name="Okafor",
+            email="onboarding@example.com",
+            password="StrongPassword123!",
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_privacy_acceptance_is_saved_and_returned_with_current_user(self):
+        response = self.client.put(
+            reverse("onboarding"),
+            {"privacy_accepted": True},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["onboarding"]["privacy_accepted"])
+
+        current_user = self.client.get(reverse("current_user"))
+        self.assertTrue(current_user.data["onboarding"]["privacy_accepted"])
 
 
 
@@ -311,6 +359,7 @@ class BrowserAuthenticationTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn("csrftoken", response.cookies)
+        self.assertIn("csrfToken", response.data)
 
     def test_login_without_csrf_is_rejected(self):
         response = self.client.post(
@@ -322,8 +371,8 @@ class BrowserAuthenticationTests(TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_valid_browser_login_sets_cookies(self):
-        self.client.get(self.csrf_url)
-        csrf_token = self.client.cookies["csrftoken"].value
+        csrf_response = self.client.get(self.csrf_url)
+        csrf_token = csrf_response.data["csrfToken"]
 
         response = self.client.post(
             self.login_url,

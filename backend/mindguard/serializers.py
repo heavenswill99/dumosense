@@ -6,6 +6,58 @@ from .models import (CognitiveTask,
                      ContextRecord)
 
 
+WELLBEING_REFLECTION_QUESTIONS = [
+    "How well did you sleep last night?",
+    "How stressed do you feel now?",
+    "How mentally tired do you feel?",
+    "How focused do you feel now?",
+    "How is your mood today?",
+]
+
+COGNITIVE_REFLECTION_QUESTIONS = [
+    "How clear did your thinking feel today?",
+    "How easy was it to remember everyday things today?",
+    "How easy was it to focus on what you needed to do today?",
+]
+
+
+class ReflectionAnswerSerializer(serializers.Serializer):
+    question = serializers.CharField()
+    value = serializers.IntegerField(min_value=1, max_value=5)
+
+    def to_internal_value(self, data):
+        if not isinstance(data, dict) or set(data) != {"question", "value"}:
+            raise serializers.ValidationError(
+                "Each answer must contain only question and value."
+            )
+        return super().to_internal_value(data)
+
+
+class MindGuardReflectionCreateSerializer(serializers.Serializer):
+    answers = serializers.ListField(
+        child=ReflectionAnswerSerializer(),
+        min_length=1,
+        max_length=5,
+    )
+    question_set_version = serializers.ChoiceField(choices=["v1"])
+    timestamp = serializers.DateTimeField()
+
+    def validate_answers(self, answers):
+        question_sets = {
+            "wellbeing_checkin": WELLBEING_REFLECTION_QUESTIONS,
+            "cognitive_checkin": COGNITIVE_REFLECTION_QUESTIONS,
+        }
+        expected = question_sets.get(self.context.get("reflection_type"))
+        questions = [answer["question"] for answer in answers]
+
+        if expected is None or questions != expected:
+            raise serializers.ValidationError(
+                "Answers must match the selected MindGuard question set."
+            )
+
+        return answers
+
+
 class CognitiveResponseCreateSerializer(serializers.Serializer):
     task_id = serializers.CharField(max_length=20)
     trial_number = serializers.IntegerField(min_value=1)

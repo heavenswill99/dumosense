@@ -75,8 +75,6 @@ const INITIAL_FORM = {
   consent_accepted: false,
 };
 
-const PRIVACY_POLICY_URL = import.meta.env.VITE_PRIVACY_POLICY_URL?.trim();
-
 function ChoiceCard({ active, children, onClick, ...props }) {
   const { className, ...buttonProps } = props;
   return (
@@ -253,12 +251,13 @@ export default function WaitlistModal({ open, onOpenChange }) {
                 DumoSense — Your Wellbeing Deserves a Smarter Future.
               </p>
               <Button
+                asChild
                 ref={successButtonRef}
-                type="button"
-                onClick={() => handleOpenChange(false)}
                 className="mt-6 h-12 rounded-full bg-primary px-8 text-base text-primary-foreground hover:opacity-90"
               >
-                Back to Website
+                <a href="https://t.me/+IDfUBKdB3utmMGY0" target="_blank" rel="noreferrer">
+                  Join the Telegram Group
+                </a>
               </Button>
             </section>
           ) : (
@@ -382,17 +381,7 @@ export default function WaitlistModal({ open, onOpenChange }) {
                   <label className="flex items-start gap-3 rounded-2xl border border-border bg-background-secondary p-4">
                     <input type="checkbox" required checked={form.consent_accepted} onChange={updateField("consent_accepted")} aria-invalid={!!errors.consent_accepted} aria-describedby={errors.consent_accepted ? "waitlist-consent-error" : undefined} className="mt-1 h-4 w-4 shrink-0 rounded border-border text-primary focus:ring-primary" />
                     <span className="text-sm leading-relaxed text-foreground">
-                      I agree to DumoSense collecting and processing my information to manage my waitlist registration and send early-access communications, as described in the{" "}
-                      {PRIVACY_POLICY_URL ? (
-                        <a href={PRIVACY_POLICY_URL} target="_blank" rel="noreferrer" className="font-medium text-primary underline">
-                          Privacy Policy
-                        </a>
-                      ) : (
-                        <>
-                          <span className="font-medium">Privacy Policy</span>.
-                          <span className="ml-1 text-muted-foreground">The policy must be published before launch.</span>
-                        </>
-                      )}
+                      I agree to DumoSense collecting and processing my information to manage my waitlist registration and send early-access communications.
                     </span>
                   </label>
                   {errors.consent_accepted && <p id="waitlist-consent-error" role="alert" className="mt-2 text-xs font-medium text-error">{errors.consent_accepted}</p>}

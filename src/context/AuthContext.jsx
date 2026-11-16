@@ -8,6 +8,15 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(undefined);
 
   const checkAuth = useCallback(async () => {
+    const previewRoute =
+      import.meta.env.DEV &&
+      ["/app/mindguard", "/app/health-reserve"].includes(window.location.pathname) &&
+      new URLSearchParams(window.location.search).get("preview") === "1";
+    if (previewRoute) {
+      setUser(null);
+      return;
+    }
+
     try {
       const { data } = await api.get("/auth/me/");
       setUser(data);
